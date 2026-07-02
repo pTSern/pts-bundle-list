@@ -1,0 +1,139 @@
+{
+    "$schema": "./@types/schema/package/index.json",
+    "package_version": 2,
+    "name": "pts-bundle-list",
+    "version": "1.0.0",
+    "author": "pTSern",
+    "editor": ">=3.8.8",
+    "scripts": {
+        "preinstall": "node ./scripts/preinstall.js",
+        "build": "tsc",
+        "watch": "tsc -w"
+    },
+    "description": "i18n:pts-bundle-list.description",
+    "main": "./dist/main.js",
+    "devDependencies": {
+        "@cocos/creator-types": "^3.8.0",
+        "typescript": "^5.8.2",
+        "@types/fs-extra": "^11.0.4",
+        "@types/node": "^18.17.1",
+        "fs-extra": "^10.0.0",
+        "vue": "^3.1.4"
+    },
+    "contributions": {
+        "profile": {
+            "project": {
+                "global_variable_key": {
+                    "default": "pTS.bundle.list",
+                    "message": "profile::project::changed",
+                    "label": "Global Variable Key"
+                },
+                "is_listing_prefabs": {
+                    "default": true,
+                    "message": "profile::project::changed_listing",
+                    "label": "Is Listing Prefabs"
+                },
+                "is_listing_imgs": {
+                    "default": true,
+                    "message": "profile::project::changed_listing",
+                    "label": "Is Listing Images"
+                },
+                "is_listing_json": {
+                    "default": true,
+                    "message": "profile::project::changed_listing",
+                    "label": "Is Listing JSON"
+                },
+                "is_registered_to_bridge": {
+                    "default": true,
+                    "message": "profile::project::changed",
+                    "label": "Is Registered To Bridge ?"
+                },
+                "plugin_name": {
+                    "default": "_bundle_list",
+                    "message": "profile::project::changed_location",
+                    "label": "Plugin Name"
+                },
+                "plugin_location": {
+                    "default": "assets/__plugins__",
+                    "message": "profile::project::changed_location",
+                    "label": "Plugin Location"
+                }
+            }
+        },
+        "project": {
+            "tab_1": {
+                "label": "Bundle List",
+                "content": {
+                    "global_variable_key": {
+                        "ui": "ui-input",
+                        "attributes": {
+                            "tooltip": "The key that storage this config on global variable. \nUse `.` for chain object.",
+                            "show-clear": true
+                        }
+                    },
+                    "is_listing_prefabs": {
+                        "ui": "ui-checkbox",
+                        "attributes": {
+                            "tooltip": ""
+                        }
+                    },
+                    "is_listing_imgs": {
+                        "ui": "ui-checkbox",
+                        "attributes": {
+                            "tooltip": ""
+                        }
+                    },
+                    "is_listing_json": {
+                        "ui": "ui-checkbox",
+                        "attributes": {
+                            "tooltip": ""
+                        }
+                    },
+                    "is_registered_to_bridge": {
+                        "ui": "ui-checkbox",
+                        "attributes": {
+                            "tooltip": ""
+                        }
+                    },
+                    "plugin_name": {
+                        "ui": "ui-input",
+                        "attributes": {
+                            "show-clear": true
+                        }
+                    },
+                    "plugin_location": {
+                        "ui": "ui-file",
+                        "attributes": {
+                            "protocols": "project",
+                            "value": "project://assets/",
+                            "type": "directory"
+                        }
+                    }
+                }
+            }
+        },
+        "messages": {
+            "profile::project::changed": {
+                "methods": [
+                    "profile::project::changed"
+                ]
+            },
+            "profile::project::changed_location": {
+                "methods": [
+                    "profile::project::changed_location"
+                ]
+            },
+            "profile::project::changed_listing": {
+                "methods": [
+                    "profile::project::changed_listing"
+                ]
+            }
+        },
+        "asset-db": {
+            "mount": {
+                "path": "./assets",
+                "readonly": true
+            }
+        }
+    }
+}
