@@ -373,10 +373,13 @@ declare namespace pTS {
 }
 
 export function load() {
+	//@ts-ignore
     Editor.Message.addBroadcastListener('asset-db:ready', _shiping);
     _getConfig().then(_ => __this_.resolver())
 }
 
 export function unload() {
+
+	//@ts-ignore
     Editor.Message.removeBroadcastListener('asset-db:ready', _shiping)
 }
