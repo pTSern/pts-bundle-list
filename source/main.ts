@@ -284,11 +284,11 @@ if (!!_$pts) {
     _dts += `${indent}type _$TList = ${tListStr};\n\n`;
 
     // type _$TContainer
-    _dts += `${indent}type _$TContainer = {\n`;
+    _dts += `${indent}type TContainer = {\n`;
     for (const key of enumKeys) {
         _dts += `${innerIndent}${key}: {\n`;
         for (const type of filterTypes) {
-            _dts += `${innerInnerIndent}${type}: Enum_${key}_${type};\n`;
+            _dts += `${innerInnerIndent}${type}: typeof Enum_${key}_${type};\n`;
         }
         _dts += `${innerIndent}}\n`;
     }
