@@ -11,7 +11,7 @@
         "watch": "tsc -w"
     },
     "description": "i18n:pts-bundle-list.description",
-    "main": "./dist/main.js",
+    "main": "./bootstrap.js",
     "devDependencies": {
         "@cocos/creator-types": "^3.8.0",
         "typescript": "^5.8.2",
