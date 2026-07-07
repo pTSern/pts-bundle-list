@@ -428,14 +428,22 @@ declare namespace pTS {
     }
 }
 
+function _bind(what: string | string[], func: Function, add: boolean) {
+    const whats = Array.isArray(what) ? what : [what]
+
+    const _method = add ? 'addBroadcastListener' : 'removeBroadcastListener'
+
+    for(const _event of whats) {
+        //@ts-ignore
+        Editor.Message[_method](_event, func);
+    }
+}
+
 export function load() {
-	//@ts-ignore
-    Editor.Message.addBroadcastListener('asset-db:ready', _shiping);
+    _bind(['asset-db:ready', 'asset-db:asset-add', 'asset-db:asset-change', 'asset-db:asset-delete'], _shiping, true)
     _getConfig().then(_ => __this_.resolver())
 }
 
 export function unload() {
-
-	//@ts-ignore
-    Editor.Message.removeBroadcastListener('asset-db:ready', _shiping)
+    _bind(['asset-db:ready', 'asset-db:asset-add', 'asset-db:asset-change', 'asset-db:asset-delete'], _shiping, false)
 }

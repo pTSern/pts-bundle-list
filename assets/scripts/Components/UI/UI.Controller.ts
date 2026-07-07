@@ -10,45 +10,58 @@ const { ccclass, property, executeInEditMode } = _decorator;
 
 @ccclass("_Bridge_Asseter")
 class _Bridge_Asseter {
-
-    @property({ type: Component, readonly: true })
-    ref: UI_Controller<any, any> = null
-
-    @property({ visible() { return this._bundle }, readonly: true })
-    protected _bundle: string = ''
-
-    @property({ type: Enum({}) })
+    @property({ type: Enum({}), group: pConst.GROUPS.EDITOR })
     get bundle() { return this._bundle }
     set bundle(x) {
         this._bundle = x;
-        if(!this.ref?.bundle) return;
-
-        const _all = this.ref.bundle.all[x];
-        if(!_all) return;
-
-        const _valid = Object.values(_all).find(Boolean);
-        console.log(" >> OUT ", _valid, _all)
-        if(!_valid) return;
-
-        const _types = Object.keys(_valid).map(_ => ({ name: _, value: _ }))
-        CCClass.Attr.setClassAttr(_Bridge_Asseter, 'type', 'enumList', _types)
+        this._actUpdateType();
     }
 
-    @property({ visible() { return this._type }, readonly: true })
+    @property({ type: Component, readonly: true, group: pConst.GROUPS.DETAIL })
+    ref: UI_Controller<any, any> = null
+
+    @property({ visible() { return this._bundle }, readonly: true, group: pConst.GROUPS.DETAIL })
+    protected _bundle: string = ''
+
+    @property({ visible() { return this._type }, readonly: true, group: pConst.GROUPS.DETAIL })
     protected _type: string = ''
 
-    @property({ type: Enum({}) })
+    @property({ type: Enum({}), group: pConst.GROUPS.EDITOR })
     get type() { return this._type }
     set type(x) {
         this._type = x
+        this._actUpdateAsset();
     }
 
-    @property({ visible() { return this._asset }, readonly: true })
+    @property({ visible() { return this._asset }, readonly: true, group: pConst.GROUPS.DETAIL })
     protected _asset: string = ''
-    @property({ type: Enum({}) })
+    @property({ type: Enum({}), group: pConst.GROUPS.EDITOR })
     get asset() { return this._asset }
     set asset(x) {
         this._asset = x
+    }
+
+    protected _actUpdateType() {
+        if(!this.ref?.bundle) return;
+
+        const _type = this.ref.bundle.all[this._bundle];
+        if(!_type) return;
+
+        const _types = Object.keys(_type).map(_ => ({ name: _, value: _ }))
+        CCClass.Attr.setClassAttr(_Bridge_Asseter, 'type', 'enumList', _types)
+    }
+
+    protected _actUpdateAsset() {
+        if(!this.ref?.bundle) return;
+
+        const _type = this.ref.bundle.all[this._bundle];
+        if(!_type) return;
+
+        const _asset = _type[this._type]
+        if(!_asset) return;
+
+        const _types = Object.keys(_asset).map(_ => ({ name: _, value: _ }))
+        CCClass.Attr.setClassAttr(_Bridge_Asseter, 'asset', 'enumList', _types)
     }
 
     focus(ref: UI_Controller<any, any>) {
@@ -59,6 +72,8 @@ class _Bridge_Asseter {
         const _keys = Object.keys(this.ref.bundle.all).map(_ => ({ name: _, value: _ }));
 
         CCClass.Attr.setClassAttr(_Bridge_Asseter, 'bundle', 'enumList', _keys)
+        this._actUpdateType();
+        this._actUpdateAsset();
     }
 
 }
@@ -68,14 +83,15 @@ class _Bridge_Converter<
     _T_UI_Id extends pFlex.TKey,
     _TAll extends Record<string, Record<pFlex.TKey, any>>
 > {
-    @property({ visible() { return this._ui }, readonly: true })
-    protected _ui: _T_UI_Id = '' as _T_UI_Id
 
-    @property({ type: Enum({}) })
+    @property({ type: Enum({}), group: pConst.GROUPS.EDITOR })
     get ui() { return this._ui }
     set ui(v) { this._ui = v }
 
-    @property({ type: _Bridge_Asseter })
+    @property({ visible() { return this._ui }, readonly: true, group: pConst.GROUPS.DETAIL })
+    protected _ui: _T_UI_Id = '' as _T_UI_Id
+
+    @property({ type: _Bridge_Asseter, group: pConst.GROUPS.EDITOR })
     asseter: _Bridge_Asseter = new _Bridge_Asseter();
 
     focus(ref: UI_Controller<_T_UI_Id, _TAll>) {
