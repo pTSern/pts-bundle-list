@@ -11,9 +11,14 @@ interface _IConfig {
 }
 
 type _TIs =  "is_listing_prefabs" | "is_listing_imgs" | "is_listing_json"
+interface _IThis {
+    filters: Set<string>
+    promise: Promise<any>
+    resolver: Function
+}
 
 const __config_: _IConfig = Object.create(null);
-const __this_: Record<string, any> = Object.create(null);
+const __this_: _IThis = Object.create(null);
 __this_.promise = new Promise( _rs => __this_.resolver = _rs );
 __this_.filters = new Set<string>()
 
@@ -312,7 +317,7 @@ async function _generator(list: ({ meta: IAssetMeta, info: AssetInfo } | undefin
             const assetKeys = Object.keys(assetObj).filter(ak => ak !== '__enums__');
             
             _dts += `${indent}enum Enum_${key}_${type} {\n`;
-            _dts += assetKeys.length > 0 ? assetKeys.map(ak => `${innerIndent}${ak} = "${assetObj[ak]}"`).join(',\n') + '\n' : '';
+            _dts += assetKeys.length > 0 ? assetKeys.map(ak => `${innerIndent}"${ak}" = "${assetObj[ak]}"`).join(',\n') + '\n' : '';
             _dts += `${indent}}\n`;
         }
     }
@@ -428,6 +433,15 @@ declare namespace pTS {
     }
 }
 
+function _asset_db_notify(uuid: string, event: AssetInfo, meta: IAssetMeta) {
+    uuid; meta;
+
+    if(__this_.filters.has(event?.type || "")) {
+        _shiping();
+    }
+
+}
+
 function _bind(what: string | string[], func: Function, add: boolean) {
     const whats = Array.isArray(what) ? what : [what]
 
@@ -440,10 +454,10 @@ function _bind(what: string | string[], func: Function, add: boolean) {
 }
 
 export function load() {
-    _bind(['asset-db:ready', 'asset-db:asset-add', 'asset-db:asset-change', 'asset-db:asset-delete'], _shiping, true)
+    _bind(['asset-db:ready', 'asset-db:asset-add', 'asset-db:asset-change', 'asset-db:asset-delete'], _asset_db_notify, true)
     _getConfig().then(_ => __this_.resolver())
 }
 
 export function unload() {
-    _bind(['asset-db:ready', 'asset-db:asset-add', 'asset-db:asset-change', 'asset-db:asset-delete'], _shiping, false)
+    _bind(['asset-db:ready', 'asset-db:asset-add', 'asset-db:asset-change', 'asset-db:asset-delete'], _asset_db_notify, false)
 }
