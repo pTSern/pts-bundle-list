@@ -23,6 +23,15 @@ class _Bridge_Asseter {
         this._bundle = x;
         if(!this.ref?.bundle) return;
 
+        const _all = this.ref.bundle.all[x];
+        if(!_all) return;
+
+        const _valid = Object.values(_all).find(Boolean);
+        console.log(" >> OUT ", _valid, _all)
+        if(!_valid) return;
+
+        const _types = Object.keys(_valid).map(_ => ({ name: _, value: _ }))
+        CCClass.Attr.setClassAttr(_Bridge_Asseter, 'type', 'enumList', _types)
     }
 
     @property({ visible() { return this._type }, readonly: true })
