@@ -20,6 +20,17 @@
         "fs-extra": "^10.0.0",
         "vue": "^3.1.4"
     },
+    "panels": {
+        "default": {
+            "title": "pTS_Bundle_List",
+            "type": "dockable",
+            "main": "dist/panel.js",
+            "size": {
+                "min-width": 350,
+                "min-height": 600
+            }
+        }
+    },
     "contributions": {
         "profile": {
             "project": {
@@ -113,6 +124,16 @@
             }
         },
         "messages": {
+            "open-panel": {
+                "methods": [
+                    "openPanel"
+                ]
+            },
+            "force-generate": {
+                "methods": [
+                    "force-generate"
+                ]
+            },
             "profile::project::changed": {
                 "methods": [
                     "profile::project::changed"
@@ -129,6 +150,14 @@
                 ]
             }
         },
+        "menu": [
+            {
+                "path": "i18n:pts-bundle-list.panel",
+                "label": "Bundle List Manager",
+                "message": "open-panel"
+            }
+        ],
+
         "asset-db": {
             "mount": {
                 "path": "./assets",

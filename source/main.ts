@@ -23,6 +23,12 @@ __this_.promise = new Promise( _rs => __this_.resolver = _rs );
 __this_.filters = new Set<string>()
 
 export const methods: { [key: string]: (...any: any) => any } = {
+    openPanel() {
+        Editor.Panel.open(pkg.name);
+    },
+    "force-generate": async function() {
+        return _shiping();
+    },
     "profile::project::changed_listing": async function(key: _TIs, value: boolean) {
         switch(key) {
             case 'is_listing_imgs': {
