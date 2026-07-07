@@ -204,7 +204,7 @@ async function _generator(list: ({ meta: IAssetMeta, info: AssetInfo } | undefin
             _p[_type] = _p[_type] || Object.create(null)
             _p[_type][_name] = _name
             return _p;
-        }, { __enums__: null } as Record<string, any> );
+        }, Object.create(null) );
     });
 
     await Promise.all(promises);
@@ -215,57 +215,96 @@ async function _generator(list: ({ meta: IAssetMeta, info: AssetInfo } | undefin
         return;
     }
 
-    // Generate JS
-    let _js = `const _$enums = ${JSON.stringify(_enums, null, 4)}\n\n`
-    _js += `const _$enum = ${JSON.stringify(_obj)};\n`;
-    if (_parts.length === 1) {
-        _js += `globalThis['${_parts[0]}'] = _$enum;\n`;
-    } else {
-        _js += `const _$ = globalThis['${_parts[0]}'] = globalThis['${_parts[0]}'] || Object.create(null);\n`;
-        let access = `_$`;
-        for (let i = 1; i < _parts.length - 1; i++) {
-            const part = _parts[i];
-            _js += `${access}['${part}'] = ${access}['${part}'] || Object.create(null);\n`;
-            access += `['${part}']`;
-        }
-        _js += `${access}['${_parts[_parts.length - 1]}'] = {
-    Enum: _$enum,
-    get: (_$k, _$t) => _$enums[_$k][_$t]
-}\n`;
-    }
-
-    if (__config_.is_registered_to_bridge) {
-        _js += `
-const _$pts = globalThis.pTS;
-if (!!_$pts) {
-    const _$bridge = _$pts.bridge;
-    (!!_$bridge && typeof _$bridge.set == 'function') ? _$bridge.set('bundles', _$enum) : console.warn('[pTS.bridge] is not defined');
-}
-`;
-    }
-
-    // Generate d.ts
     const enumKeys = Object.keys(_obj).filter(k => k !== '__enums__');
     const filterTypes = Array.from(__this_.filters as Set<string> || []).map(f => f.replace("cc.", ""));
 
+    const _typeObj = { __enums__: null } as Record<string, any>;
+    for (const t of filterTypes) {
+        _typeObj[t] = t;
+    }
+
+    // Generate JS (compact/minified)
+    let _js = `const _$enums=${JSON.stringify(_enums)};`;
+
+    // Write all Enum_${bundle}_${type} constants
+    for (const key of enumKeys) {
+        for (const type of filterTypes) {
+            const assetObj = (_enums[key] && _enums[key][type]) || {};
+            _js += `const Enum_${key}_${type}=${JSON.stringify(assetObj)};`;
+        }
+    }
+
+    if (_parts.length === 1) {
+        _js += `globalThis['${_parts[0]}']={`;
+        _js += `container:_$enums,`;
+        _js += `get:(_$k,_$t)=>_$enums[_$k][_$t],`;
+        _js += `bundle:{`;
+        _js += `list:${JSON.stringify(enumKeys)},`;
+        _js += `array:${JSON.stringify(enumKeys)},`;
+        _js += `Enum:${JSON.stringify(_obj)},`;
+        _js += `CCEnums:${JSON.stringify(enumKeys.map(k => ({ name: k, value: k })))},`;
+        _js += `},`;
+        _js += `type:{`;
+        _js += `list:${JSON.stringify(filterTypes)},`;
+        _js += `array:${JSON.stringify(filterTypes)},`;
+        _js += `Enum:${JSON.stringify(_typeObj)},`;
+        _js += `CCEnums:${JSON.stringify(filterTypes.map(t => ({ name: t, value: t })))},`;
+        _js += `},`;
+        for (const key of enumKeys) {
+            for (const type of filterTypes) {
+                _js += `Enum_${key}_${type}:Enum_${key}_${type},`;
+            }
+        }
+        _js += `};`;
+    } else {
+        _js += `const _$=globalThis['${_parts[0]}']=globalThis['${_parts[0]}']||Object.create(null);`;
+        let access = `_$`;
+        for (let i = 1; i < _parts.length - 1; i++) {
+            const part = _parts[i];
+            _js += `${access}['${part}']=${access}['${part}']||Object.create(null);`;
+            access += `['${part}']`;
+        }
+        _js += `${access}['${_parts[_parts.length - 1]}']={`;
+        _js += `container:_$enums,`;
+        _js += `get:(_$k,_$t)=>_$enums[_$k][_$t],`;
+        _js += `bundle:{`;
+        _js += `list:${JSON.stringify(enumKeys)},`;
+        _js += `array:${JSON.stringify(enumKeys)},`;
+        _js += `Enum:${JSON.stringify(_obj)},`;
+        _js += `CCEnums:${JSON.stringify(enumKeys.map(k => ({ name: k, value: k })))},`;
+        _js += `},`;
+        _js += `type:{`;
+        _js += `list:${JSON.stringify(filterTypes)},`;
+        _js += `array:${JSON.stringify(filterTypes)},`;
+        _js += `Enum:${JSON.stringify(_typeObj)},`;
+        _js += `CCEnums:${JSON.stringify(filterTypes.map(t => ({ name: t, value: t })))},`;
+        _js += `},`;
+        for (const key of enumKeys) {
+            for (const type of filterTypes) {
+                _js += `Enum_${key}_${type}:Enum_${key}_${type},`;
+            }
+        }
+        _js += `};`;
+    }
+
+    if (__config_.is_registered_to_bridge) {
+        _js += `const _$pts=globalThis.pTS;if(!!_$pts){const _$bridge=_$pts.bridge;(!!_$bridge&&typeof _$bridge.set=='function')?_$bridge.set('bundles',globalThis['${_parts.join("']['")}'].bundle.Enum):console.warn('[pTS.bridge] is not defined');}`;
+    }
+
+    // Generate d.ts
     let _dts = "";
 
     _dts += `declare namespace ${_parts[0]} {\n`;
     for (let i = 1; i < _parts.length; i++) {
-        const indent = '\t'.repeat(i);
-        _dts += `${indent}export namespace ${_parts[i]} {\n`;
+        const indentStr = '\t'.repeat(i);
+        _dts += `${indentStr}export namespace ${_parts[i]} {\n`;
     }
 
     const indent = '\t'.repeat(_parts.length);
     const innerIndent = '\t'.repeat(_parts.length + 1);
     const innerInnerIndent = '\t'.repeat(_parts.length + 2);
 
-    // export enum Enum
-    _dts += `${indent}export enum Enum {\n`;
-    _dts += enumKeys.length > 0 ? enumKeys.map(k => `${innerIndent}${k} = "${_obj[k]}"`).join(',\n') + '\n' : '';
-    _dts += `${indent}}\n\n`;
-
-    // enum Enum_${KEY_OF_MAIN_ENUM}_${TYPE_OF_FILE}
+    // Write the sub-enum definitions Enum_${bundle}_${type}
     for (const key of enumKeys) {
         const bundleEnums = _enums[key] || {};
         for (const type of filterTypes) {
@@ -279,12 +318,8 @@ if (!!_$pts) {
     }
     _dts += '\n';
 
-    // type _$TList
-    const tListStr = filterTypes.map(f => `"${f}"`).join(' | ') || 'never';
-    _dts += `${indent}type _$TList = ${tListStr};\n\n`;
-
-    // type _$TContainer
-    _dts += `${indent}type TContainer = {\n`;
+    // TContainer
+    _dts += `${indent}export type TContainer = {\n`;
     for (const key of enumKeys) {
         _dts += `${innerIndent}${key}: {\n`;
         for (const type of filterTypes) {
@@ -294,13 +329,34 @@ if (!!_$pts) {
     }
     _dts += `${indent}}\n\n`;
 
-    // function get
-    _dts += `${indent}function get<_TKey extends Enum, _TList extends _$TList>(key: _TKey, type: _TList): _$TContainer[_TKey][_TList]\n`;
+    // namespace bundle
+    _dts += `${indent}export namespace bundle {\n`;
+    _dts += `${innerIndent}export const list: [${enumKeys.map(k => `"${k}"`).join(', ')}];\n`;
+    _dts += `${innerIndent}export type TType = typeof list[number];\n`;
+    _dts += `${innerIndent}export enum Enum {\n`;
+    _dts += enumKeys.length > 0 ? enumKeys.map(k => `${innerInnerIndent}${k} = "${_obj[k]}"`).join(',\n') + '\n' : '';
+    _dts += `${innerIndent}}\n`;
+    _dts += `${innerIndent}export const CCEnums: { name: TType; value: TType }[];\n`;
+    _dts += `${indent}}\n\n`;
+
+    // namespace type
+    _dts += `${indent}export namespace type {\n`;
+    _dts += `${innerIndent}export const list: [${filterTypes.map(t => `"${t}"`).join(', ')}];\n`;
+    _dts += `${innerIndent}export type TType = typeof list[number];\n`;
+    _dts += `${innerIndent}export enum Enum {\n`;
+    _dts += filterTypes.length > 0 ? filterTypes.map(t => `${innerInnerIndent}${t} = "${_typeObj[t]}"`).join(',\n') + '\n' : '';
+    _dts += `${innerIndent}}\n`;
+    _dts += `${innerIndent}export const CCEnums: { name: TType; value: TType }[];\n`;
+    _dts += `${indent}}\n\n`;
+
+    // container and get
+    _dts += `${indent}export const container: TContainer;\n`;
+    _dts += `${indent}function get<_TKey extends bundle.TType, _TType extends type.TType>(key: _TKey, type: _TType): TContainer[_TKey][_TType];\n`;
 
     // Close namespaces
     for (let i = _parts.length - 1; i >= 0; i--) {
-        const indent = '\t'.repeat(i);
-        _dts += `${indent}}\n`;
+        const indentStr = '\t'.repeat(i);
+        _dts += `${indentStr}}\n`;
     }
 
     if (__config_.is_registered_to_bridge) {
@@ -308,7 +364,7 @@ if (!!_$pts) {
 declare namespace pTS {
     export namespace bridge {
         export type _TBundles_Definded_By_Extensions = {
-            bundles: typeof ${__config_.global_variable_key}
+            bundles: typeof ${__config_.global_variable_key}.bundle.Enum
         }
     }
 }
