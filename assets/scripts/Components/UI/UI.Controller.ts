@@ -1,10 +1,10 @@
 import { _decorator, CCClass, Component, Enum, Node } from "cc";
 import { Event_Driver } from "db://pts-core/scripts/Components/Event/Event.Driver";
-import { UI_IBase } from "db://pts-asset/interfaces/Components/UI/UI.IBase";
 import { CC_EnumList, CC_IEnumable, CC_IEnumList } from 'db://pts-core/scripts/interfaces/cc/CC.IEnumable'
 import { EDITOR } from "cc/env";
 import { pConst } from "db://pts-core/scripts/utils";
 import { Bundle_Manager } from "../../bundle/Bundle.Manager";
+import { UI_IBase } from "../../../interfaces/Components/UI/UI.IBase";
 
 const { ccclass, property, executeInEditMode } = _decorator;
 
