@@ -209,8 +209,14 @@ async function _generator(list: ({ meta: IAssetMeta, info: AssetInfo } | undefin
         ) as any[];
 
         _enums[c.info.name] = assets.reduce( (_p, _c) => {
-            const _names = _c.name.split('.')
-            const _name = _names.slice(0, -1).join('.')
+            const normBundlePath = c.info.path.replace(/\\/g, '/');
+            const bundlePrefix = normBundlePath.endsWith('/') ? normBundlePath : `${normBundlePath}/`;
+            const normAssetPath = (_c.path || '').replace(/\\/g, '/');
+
+            let relPath = normAssetPath.startsWith(bundlePrefix) ? normAssetPath.substring(bundlePrefix.length) : _c.name;
+            const ext = path.extname(relPath);
+            const _name = ext ? relPath.substring(0, relPath.length - ext.length) : relPath;
+
             const _type = _c.type.replace("cc.", "")
             _p[_type] = _p[_type] || Object.create(null)
             _p[_type][_name] = _name

@@ -32,9 +32,11 @@ export abstract class UI_Base<
 
     async open(opt: UI_IOpenOpt<_TId>, ...args: Parameters<_TParams["open"]>): Promise<ReturnType<_TParams["open"]>> {
         this.emit('onBeforeOpen', ...args);
+        this._onBeforeOpen?.();
 
         const _out = await (this._opener ? this._opener(...args) : ( this.root.active = true, pConst.RESOLVER ))
         this.emit('onAfterOpen', ...args);
+        this._onAfterOpen?.();
 
         const { } = opt;
 
@@ -43,15 +45,22 @@ export abstract class UI_Base<
 
     async close(opt: UI_ICloseOpt, ...args: Parameters<_TParams["close"]>): Promise<ReturnType<_TParams["close"]>> {
         this.emit('onBeforeClose', ...args);
+        this._onBeforeClose?.();
+
         const _out = await (this._opener ? this._closer(...args) : ( this.root.active = false, pConst.RESOLVER ))
         this.emit('onAfterClose', ...args);
-
-        const { isOpenBackUp, isForceDestroy } = opt;
+        this._onAfterClose?.();
 
         return _out as ReturnType<_TParams["close"]>
     }
 
     protected _opener?(...args: Parameters<_TParams['open']>): Promise<ReturnType<_TParams['open']>>
     protected _closer?(...args: Parameters<_TParams['close']>): Promise<ReturnType<_TParams['close']>>
+
+    protected _onBeforeOpen?(): void
+    protected _onAfterOpen?(): void
+
+    protected _onBeforeClose?(): void
+    protected _onAfterClose?(): void
 }
 

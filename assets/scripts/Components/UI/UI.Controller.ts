@@ -1,10 +1,10 @@
 import { _decorator, CCClass, Component, Enum, Node } from "cc";
 import { Event_Driver } from "db://pts-core/scripts/Components/Event/Event.Driver";
 import { UI_IBase } from "db://pts-asset/interfaces/Components/UI/UI.IBase";
-import { Asset_Manager } from "../Assets/Assets.Manager";
-import { CC_IEnumable, CC_IEnumList } from 'db://pts-core/scripts/interfaces/cc/CC.IEnumable'
+import { CC_EnumList, CC_IEnumable, CC_IEnumList } from 'db://pts-core/scripts/interfaces/cc/CC.IEnumable'
 import { EDITOR } from "cc/env";
 import { pConst } from "db://pts-core/scripts/utils";
+import { Bundle_Manager } from "../../bundle/Bundle.Manager";
 
 const { ccclass, property, executeInEditMode } = _decorator;
 
@@ -48,7 +48,7 @@ class _Bridge_Asseter {
         if(!_type) return;
 
         const _types = Object.keys(_type).map(_ => ({ name: _, value: _ }))
-        CCClass.Attr.setClassAttr(_Bridge_Asseter, 'type', 'enumList', _types)
+        CCClass.Attr.setClassAttr(this, 'type', 'enumList', _types)
     }
 
     protected _actUpdateAsset() {
@@ -61,17 +61,18 @@ class _Bridge_Asseter {
         if(!_asset) return;
 
         const _types = Object.keys(_asset).map(_ => ({ name: _, value: _ }))
-        CCClass.Attr.setClassAttr(_Bridge_Asseter, 'asset', 'enumList', _types)
+        CCClass.Attr.setClassAttr(this, 'asset', 'enumList', _types)
     }
 
     focus(ref: UI_Controller<any, any>) {
         this.ref = ref;
 
+        console.log(">> DATA", this.ref.bundle)
         if(!this.ref?.bundle) return;
 
         const _keys = Object.keys(this.ref.bundle.all).map(_ => ({ name: _, value: _ }));
 
-        CCClass.Attr.setClassAttr(_Bridge_Asseter, 'bundle', 'enumList', _keys)
+        CCClass.Attr.setClassAttr(this, 'bundle', 'enumList', _keys)
         this._actUpdateType();
         this._actUpdateAsset();
     }
@@ -95,6 +96,7 @@ class _Bridge_Converter<
     asseter: _Bridge_Asseter = new _Bridge_Asseter();
 
     focus(ref: UI_Controller<_T_UI_Id, _TAll>) {
+        CCClass.Attr.setClassAttr(this, 'ui', 'enumList', ref?.list || []);
         this.asseter.focus(ref);
     }
 }
@@ -107,35 +109,36 @@ class _Bridge_UIToAsset<
     @property({ type: Component, readonly: true })
     ref: UI_Controller<_T_UI_Id, _TAll> = null
 
+    @property({  })
+    get actAutoGen() { return false }
+    set actAutoGen(x) {
+        if(!x) return;
+        if(!this.ref) return;
+
+        this.ref.list.forEach(_ui => {
+            const _lookup = this._converters.find(_cv => _cv.ui == _ui.value);
+            if(!!_lookup) return;
+
+            const _ret = new _Bridge_Converter<_T_UI_Id, _TAll>();
+            _ret.ui = _ui.value;
+            this._converters.push(_ret);
+        });
+    }
+
     @property([_Bridge_Converter])
-    protected _conveters: _Bridge_Converter<_T_UI_Id, _TAll>[] = []
+    protected _converters: _Bridge_Converter<_T_UI_Id, _TAll>[] = []
     @property([_Bridge_Converter])
-    get conveters() { return this._conveters }
-    set conveters(x) {
-        this._conveters = x;
-        this._conveters.forEach(_ => _.focus(this.ref))
+    get converters() { return this._converters }
+    set converters(x) {
+        this._converters = x;
+        this.focus(this.ref);
     }
 
     focus(ref: UI_Controller<_T_UI_Id, _TAll>) {
         if(!ref) return;
         this.ref = ref;
 
-        let _list: CC_IEnumList<_T_UI_Id, _T_UI_Id>[] = []
-        if(CC_IEnumable(ref.list)) {
-            for(const [k, v] of Object.entries(ref.list)) {
-                if(k === '__enums__') continue;
-                _list.push({ name: k as _T_UI_Id, value: v })
-            }
-        } else if (CC_IEnumList(ref.list)) {
-            _list = ref.list
-        } else {
-            for(const ret of ref.list) {
-                _list.push({ name: ret, value: ret })
-            }
-        }
-
-        CCClass.Attr.setClassAttr(_Bridge_Converter, 'ui', 'enumList', _list);
-        this._conveters.forEach(_ => _.focus(ref))
+        this._converters.forEach(_ => _.focus(ref))
     }
 
     init() {
@@ -159,15 +162,8 @@ export abstract class UI_Controller<
     @property({ type: Node, group: pConst.GROUPS.OPTION })
     loading: Node = null
 
-    @property({ type: Asset_Manager })
-    protected _bundle: Asset_Manager<_TAll> = null
-
-    @property({ type: Asset_Manager, group: pConst.GROUPS.CORE })
+    protected abstract _bundle: Bundle_Manager<_TAll>;
     get bundle() { return this._bundle }
-    set bundle(x) {
-        this._bundle = x;
-        this.onFocusInEditor();
-    }
 
     @property({ type: _Bridge_UIToAsset, group: pConst.GROUPS.EDITOR })
     protected bridge: _Bridge_UIToAsset<_T_UI_Id, _TAll> = new _Bridge_UIToAsset()
@@ -176,7 +172,7 @@ export abstract class UI_Controller<
     protected _pool: Map<_T_UI_Id, UI_IBase<_T_UI_Id, any>> = new Map()
 
     protected abstract _list: CC_IEnumList<_T_UI_Id, _T_UI_Id>[]  | CC_IEnumable<_T_UI_Id> | _T_UI_Id[]
-    get list() { return this._list }
+    get list() { return CC_EnumList(this._list) }
 
     protected __preload(): void {
         if(!this._list) {
@@ -199,6 +195,7 @@ export abstract class UI_Controller<
     onFocusInEditor(): void {
         if(!EDITOR) return;
         this.bridge.focus(this);
+        console.log("onFocus")
     }
 
     open<_TWho extends UI_IBase<_T_UI_Id, any>>(id: _T_UI_Id, ...params: Parameters<_TWho['open']>) {
