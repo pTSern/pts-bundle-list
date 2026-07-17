@@ -19,17 +19,20 @@
             "db://assets/*": [
                 "../../../assets/*"
             ],
-            "db://pts-asset/*": [
-                "../../pts-asset/assets/*"
-            ],
             "db://pts-core/*": [
                 "../../pts-core/assets/*"
+            ],
+            "db://pts-bundle-list/*": [
+                "./*"
             ]
         }
     },
     "include": [
         "**/*",
         ".dev/**/*",
+        "../../pts-core/**/*.d.ts",
+        "../../pts-core/assets/**/*.ts",
+        "../../pts-core/assets/.dev/**/*.d.ts",
         "../../../assets/.dev/**/*.d.ts"
     ]
 }
