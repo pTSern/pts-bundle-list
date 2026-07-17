@@ -1,4 +1,4 @@
-import { _decorator, CCClass, CCString, Component, Enum } from 'cc';
+import { _decorator, CCClass, Component, Enum } from 'cc';
 import { DEV } from 'cc/env';
 import { Bundle_Manager } from '../../bundle/Bundle.Manager';
 import { CC_EnumList } from 'db://pts-core/scripts/interfaces/cc/CC.IEnumable';

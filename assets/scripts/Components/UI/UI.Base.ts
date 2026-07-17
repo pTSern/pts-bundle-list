@@ -1,7 +1,7 @@
 import { _decorator, Node } from "cc";
 import { pConst } from "db://pts-core/scripts/utils";
 import { Event_Driver } from "db://pts-core/scripts/Components/Event/Event.Driver";
-import { UI_IBase, UI_ICloseOpt, UI_IOpenOpt, UI_TParams } from "db://pts-asset/interfaces/Components/UI/UI.IBase";
+import { UI_IBase, UI_ICloseOpt, UI_IOpenOpt, UI_TParams } from "../../../interfaces/Components/UI/UI.IBase";
 
 const { ccclass, property } = _decorator;
 
