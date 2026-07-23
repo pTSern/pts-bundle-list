@@ -1,8 +1,8 @@
-import { _decorator, Asset, CCClass, CCString, Component, Enum, instantiate, js, Node, Prefab, warn } from "cc";
+import { _decorator, Asset, CCClass, Component, Enum, instantiate, js, Node, Prefab } from "cc";
 import { Event_Driver } from "db://pts-core/scripts/Components/Event/Event.Driver";
 import { CC_EnumList, CC_IEnumable, CC_IEnumList } from 'db://pts-core/scripts/interfaces/cc/CC.IEnumable'
 import { EDITOR } from "cc/env";
-import { pAsync, pConst } from "db://pts-core/scripts/utils";
+import { pConst } from "db://pts-core/scripts/utils";
 import { Bundle_Manager } from "../../bundle/Bundle.Manager";
 import { UI_IBase, UI_ICloseOpt, UI_IOpenOpt } from "../../../interfaces/Components/UI/UI.IBase";
 import { UI_IController } from "db://pts-bundle-list/interfaces/Components/UI/UI.IController";
@@ -182,7 +182,6 @@ class _Bridge_UIToAsset<
 }
 
 @ccclass("UI_Controller")
-@executeInEditMode()
 export abstract class UI_Controller<
     _T_UI_Id extends pFlex.TKey,
     _TAll extends Record<string, Record<pFlex.TKey, any>>
@@ -191,11 +190,17 @@ export abstract class UI_Controller<
     @property({ type: Node, group: pConst.GROUPS.CORE })
     screen: Node = null
 
+    @property({ type: Node, group: pConst.GROUPS.OPTION })
+    dark: Node = null
+
     @property({ type: Node, group: pConst.GROUPS.CORE })
     popup: Node = null
 
     @property({ type: Helper_UI_Loader, group: pConst.GROUPS.OPTION, visible: true })
     loading: Helper_UI_Loader = new Helper_UI_Loader();
+
+    @property({ group: pConst.GROUPS.OPTION, type: Enum({}) })
+    landing: _T_UI_Id = '' as _T_UI_Id;
 
     protected abstract _bundle: Bundle_Manager<_TAll>;
     get bundle() { return this._bundle }
@@ -213,14 +218,8 @@ export abstract class UI_Controller<
     get list() { return CC_EnumList(this._list) }
 
     protected __preload(): void {
-        if(!this._list) {
-            this.destroy();
-
-            console.warn("[UI.Controller] >> Should initiate the `_list`")
-            return;
-        }
-
         this._actSetupLoading();
+        this.dark && ( this.dark.active = false )
     }
 
     protected _actSetupLoading() {
@@ -238,10 +237,24 @@ export abstract class UI_Controller<
         this.bridge.init();
     }
 
+    protected onEnable(): void {
+        this.open(this.landing)
+    }
+
     onFocusInEditor(): void {
         if(!EDITOR) return;
+        CCClass.Attr.setClassAttr(this, 'landing', 'enumList', this.list || []);
         this.bridge.focus(this);
-        console.log("onFocus")
+    }
+
+    resetInEditor(): void {
+        if(!this._list) {
+            this.destroy();
+
+            console.warn("[UI.Controller] >> Should initiate the `_list`")
+            return;
+        }
+        this.onFocusInEditor();
     }
 
     async open<_TWho extends UI_IBase<_T_UI_Id, any>>(id: _T_UI_Id, ...params: Parameters<_TWho['open']>) {
@@ -330,35 +343,53 @@ export abstract class UI_Controller<
     protected _onOpenUI(target: UI_IBase<_T_UI_Id, any>, opt: UI_IOpenOpt<_T_UI_Id>) {
         if(!target || !target.isValid) return;
 
-        const { arrBackUpPermantly, isOnTop, layer, arrBackUpOnce } = opt;
+        if(opt) {
+            const { arrBackUpPermantly, isOnTop, layer, arrBackUpOnce } = opt;
 
-        if(!target.isPopup) {
-            this._scene && target.setBackUp([this._scene], true);
-            this._scene = target.tid;
+            if(!target.isPopup) {
+                this._scene && target.setBackUp([this._scene], true);
+                this._scene = target.tid;
+            }
+
+            if(layer) {
+                target.root.layer = layer;
+            }
+
+            if(isOnTop) {
+                const _papa = target.isPopup ? this.popup : this.screen;
+                const _max = _papa.children.length;
+
+                target.setDrawOrder(_max);
+            }
+
+            arrBackUpPermantly && target.setBackUp(arrBackUpPermantly, false);
+            arrBackUpOnce && target.setBackUp(arrBackUpOnce, true)
         }
 
-        if(layer) {
-            target.root.layer = layer;
+        if(!!this.dark) {
+            target.isPopup && (this.dark.active = true);
         }
-
-        if(isOnTop) {
-            const _papa = target.isPopup ? this.popup : this.screen;
-            const _max = _papa.children.length;
-
-            target.setDrawOrder(_max);
-        }
-
-        arrBackUpPermantly && target.setBackUp(arrBackUpPermantly, false);
-        arrBackUpOnce && target.setBackUp(arrBackUpOnce, true)
     }
 
     protected _onCloseUI(target: UI_IBase<_T_UI_Id, any>, opt: UI_ICloseOpt) {
         if(!target || !target.isValid) return;
 
-        const { isNotOpenBackUp, isForceDestroy } = opt;
+        if(!!opt) {
+            const { isNotOpenBackUp, isForceDestroy } = opt;
 
-        !isNotOpenBackUp && target.actOpenBackUp();
-        isForceDestroy && target.actDestroyCompletly();
+            !isNotOpenBackUp && target.actOpenBackUp();
+            isForceDestroy && target.actDestroyCompletly();
+        }
+
+        if(!!this.dark) {
+            let _is = false;
+            this._pool.forEach(_ => {
+                if(_.isPopup && _.isOpening) {
+                    _is = true;
+                }
+            })
+            this.dark.active = !_is;
+        }
     }
 
     protected update(dt: number): void {
