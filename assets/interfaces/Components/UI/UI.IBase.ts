@@ -35,8 +35,8 @@ export interface UI_IBase<
     backups: _TId[]
 
     link(owner: UI_IController<any, any>): void
-    open(opt: UI_IOpenOpt<_TId>, ...args: Parameters<_TParams['open']>): Promise<ReturnType<_TParams['open']>>
-    close(opt: UI_ICloseOpt, ...args: Parameters<_TParams['close']>): Promise<ReturnType<_TParams['close']>>
+    open(opt?: UI_IOpenOpt<_TId>, ...args: Parameters<_TParams['open']>): Promise<ReturnType<_TParams['open']>>
+    close(opt?: UI_ICloseOpt, ...args: Parameters<_TParams['close']>): Promise<ReturnType<_TParams['close']>>
     setBackUp(id: _TId[], once: boolean): void
     setDrawOrder(zIndex: number): void
     actOpenBackUp(): void
