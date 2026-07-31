@@ -59,15 +59,10 @@
                     "message": "profile::project::changed",
                     "label": "Is Registered To Bridge ?"
                 },
-                "plugin_name": {
-                    "default": "_bundle_list",
-                    "message": "profile::project::changed_location",
-                    "label": "Plugin Name"
-                },
-                "plugin_location": {
-                    "default": "assets/__plugins__",
-                    "message": "profile::project::changed_location",
-                    "label": "Plugin Location"
+                "btn_force_generate": {
+                    "default": false,
+                    "message": "force-generate",
+                    "label": "Force Generate"
                 }
             }
         },
@@ -106,18 +101,11 @@
                             "tooltip": ""
                         }
                     },
-                    "plugin_name": {
-                        "ui": "ui-input",
+                    "btn_force_generate": {
+                        "ui": "ui-button",
                         "attributes": {
-                            "show-clear": true
-                        }
-                    },
-                    "plugin_location": {
-                        "ui": "ui-file",
-                        "attributes": {
-                            "protocols": "project",
-                            "value": "project://assets/",
-                            "type": "directory"
+                            "type": "primary",
+                            "label": "Force Generate"
                         }
                     }
                 }
@@ -137,11 +125,6 @@
             "profile::project::changed": {
                 "methods": [
                     "profile::project::changed"
-                ]
-            },
-            "profile::project::changed_location": {
-                "methods": [
-                    "profile::project::changed_location"
                 ]
             },
             "profile::project::changed_listing": {
