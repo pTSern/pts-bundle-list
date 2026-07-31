@@ -8,7 +8,12 @@ declare namespace pTS {
 				"$shared/avatar/prefabs/frame" = "$shared/avatar/prefabs/frame",
 				"$shared/heart/prefabs/Heart_UI" = "$shared/heart/prefabs/Heart_UI",
 				"home_screen/$main_page/prefabs/HomeScreen_Page_Home" = "home_screen/$main_page/prefabs/HomeScreen_Page_Home",
-				"home_screen/_$shared/prefabs/home_screen" = "home_screen/_$shared/prefabs/home_screen"
+				"home_screen/_$shared/prefabs/home_screen" = "home_screen/_$shared/prefabs/home_screen",
+				"$shared/coin/prefabs/Coin_UI" = "$shared/coin/prefabs/Coin_UI",
+				"$shared/star/prefabs/Star_UI" = "$shared/star/prefabs/Star_UI",
+				"$shared/settings/prefabs/Setting_UI" = "$shared/settings/prefabs/Setting_UI",
+				"$shared/start_game/prefabs/StartGame_UI" = "$shared/start_game/prefabs/StartGame_UI",
+				"$shared/builder/prefabs/Builder_UI" = "$shared/builder/prefabs/Builder_UI"
 			}
 			enum Enum_wonder_match_Prefab {
 			}
