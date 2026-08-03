@@ -6,14 +6,18 @@ declare namespace pTS {
 				"$shared/avatar/prefabs/avatar" = "$shared/avatar/prefabs/avatar",
 				"$shared/avatar/prefabs/Avatar_UI" = "$shared/avatar/prefabs/Avatar_UI",
 				"$shared/avatar/prefabs/frame" = "$shared/avatar/prefabs/frame",
+				"$shared/builder/prefabs/Builder_UI" = "$shared/builder/prefabs/Builder_UI",
+				"$shared/coin/prefabs/Coin_UI" = "$shared/coin/prefabs/Coin_UI",
 				"$shared/heart/prefabs/Heart_UI" = "$shared/heart/prefabs/Heart_UI",
+				"$shared/settings/prefabs/Setting_UI" = "$shared/settings/prefabs/Setting_UI",
+				"$shared/star/prefabs/Star_UI" = "$shared/star/prefabs/Star_UI",
+				"$shared/start_game/prefabs/StartGame_UI" = "$shared/start_game/prefabs/StartGame_UI",
 				"home_screen/$main_page/prefabs/HomeScreen_Page_Home" = "home_screen/$main_page/prefabs/HomeScreen_Page_Home",
 				"home_screen/_$shared/prefabs/home_screen" = "home_screen/_$shared/prefabs/home_screen",
-				"$shared/coin/prefabs/Coin_UI" = "$shared/coin/prefabs/Coin_UI",
-				"$shared/star/prefabs/Star_UI" = "$shared/star/prefabs/Star_UI",
-				"$shared/settings/prefabs/Setting_UI" = "$shared/settings/prefabs/Setting_UI",
-				"$shared/start_game/prefabs/StartGame_UI" = "$shared/start_game/prefabs/StartGame_UI",
-				"$shared/builder/prefabs/Builder_UI" = "$shared/builder/prefabs/Builder_UI"
+				"$shared/diamond_hunt_process/prefabs/DiamondHuntProcess_UI" = "$shared/diamond_hunt_process/prefabs/DiamondHuntProcess_UI",
+				"$shared/diamond_hunt_process/prefabs/$_data" = "$shared/diamond_hunt_process/prefabs/$_data",
+				"decorator/$builder/prefabs/Decorator_Builder_UI" = "decorator/$builder/prefabs/Decorator_Builder_UI",
+				"decorator/$level/prefabs/item_ui" = "decorator/$level/prefabs/item_ui"
 			}
 			enum Enum_wonder_match_Prefab {
 			}
