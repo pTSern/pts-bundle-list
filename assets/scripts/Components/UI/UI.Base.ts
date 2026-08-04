@@ -1,9 +1,10 @@
-import { _decorator, CCString, Component, Enum, Node } from "cc";
+import { _decorator, CCString, Component, Enum, log, Node } from "cc";
 import { pArray, pConst } from "db://pts-core/scripts/utils";
 import { Event_Driver } from "db://pts-core/scripts/Components/Event/Event.Driver";
 import { UI_IBase, UI_ICloseOpt, UI_IOpenOpt, UI_TParams } from "../../../interfaces/Components/UI/UI.IBase";
 import { UI_IController } from "db://pts-bundle-list/interfaces/Components/UI/UI.IController";
 import { editor_property } from "db://pts-core/scripts/utils/pClass";
+import { DEV } from "cc/env";
 
 const { ccclass, property } = _decorator;
 
@@ -50,13 +51,14 @@ export abstract class UI_Base<
         this._owner = owner;
     }
 
-    protected onLoad(): void {
+    protected __preload(): void {
+        super.__preload();
         this.backups = pArray.unique(this.backups, _ => _ !== this.tid);
-        console.log("[UI_Base].{onLoad} >> Setup backups", this.backups)
     }
 
     async open(opt: UI_IOpenOpt<_TId>, ...args: Parameters<_TParams["open"]>): Promise<ReturnType<_TParams["open"]>> {
         if(!this._owner || !this._owner.isValid) return;
+        DEV && log('[UI_Base] Open >>', this, " with opt ", opt, ' args ', ...args);
 
         this.emit('onBeforeOpen', ...args);
         this._onBeforeOpen?.();
@@ -85,6 +87,7 @@ export abstract class UI_Base<
 
     async close(opt: UI_ICloseOpt, ...args: Parameters<_TParams["close"]>): Promise<ReturnType<_TParams["close"]>> {
         if(!this._owner || !this._owner.isValid) return;
+        DEV && log('[UI_Base] Close >>', this, " with opt ", opt, ' args ', ...args);
 
         this.emit('onBeforeClose', ...args);
         this._onBeforeClose?.();
