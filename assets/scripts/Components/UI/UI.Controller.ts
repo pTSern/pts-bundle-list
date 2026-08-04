@@ -1,4 +1,4 @@
-import { _decorator, Asset, CCClass, Component, Enum, instantiate, js, Node, Prefab } from "cc";
+import { _decorator, Asset, CCClass, CCInteger, Component, Enum, instantiate, js, Node, Prefab } from "cc";
 import { Event_Driver } from "db://pts-core/scripts/Components/Event/Event.Driver";
 import { CC_EnumList, CC_IEnumable, CC_IEnumList } from 'db://pts-core/scripts/interfaces/cc/CC.IEnumable'
 import { EDITOR } from "cc/env";
@@ -9,12 +9,13 @@ import { UI_IController } from "db://pts-bundle-list/interfaces/Components/UI/UI
 import { Helper_UI_Loader } from "db://pts-core/scripts/helper/UI/Helper.UI.Loader";
 import { editor_property } from "db://pts-core/scripts/utils/pClass";
 
-const { ccclass, property, executeInEditMode } = _decorator;
+const { ccclass, property } = _decorator;
 
-interface _IData {
+interface _$IData {
     bundle: string
     type: string
     path: string
+    max: number
 }
 
 @ccclass("_Bridge_Asseter")
@@ -76,7 +77,6 @@ class _Bridge_Asseter {
     focus(ref: UI_Controller<any, any>) {
         this.ref = ref;
 
-        console.log(">> DATA", this.ref.bundle)
         if(!this.ref?.bundle) return;
 
         const _keys = Object.keys(this.ref.bundle.all).map(_ => ({ name: _, value: _ }));
@@ -86,15 +86,20 @@ class _Bridge_Asseter {
         this._actUpdateAsset();
     }
 
-    get(): _IData {
+    get() {
         return {
             bundle: this._bundle,
             type: this._type,
-            path: this._asset
+            path: this._asset,
         }
     }
 
 }
+
+type _$IOpenOpt<_T_UI_Id extends pFlex.TKey> = {
+    id: _T_UI_Id;
+    loading: boolean
+} | _T_UI_Id
 
 @ccclass("_Bridge_Converter")
 class _Bridge_Converter<
@@ -105,6 +110,9 @@ class _Bridge_Converter<
     @property({ type: Enum({}), group: pConst.GROUPS.EDITOR })
     get ui() { return this._ui }
     set ui(v) { this._ui = v }
+
+    @property({ type: CCInteger, min: 0 })
+    intMaxInstance: number = 1
 
     @property({ visible() { return this._ui }, readonly: true, group: pConst.GROUPS.DETAIL })
     protected _ui: _T_UI_Id = '' as _T_UI_Id
@@ -118,8 +126,11 @@ class _Bridge_Converter<
     }
 
     is(ui: _T_UI_Id) { return ui === this._ui }
-    get() {
-        return this.asseter.get()
+    get(): _$IData {
+        return {
+            ...this.asseter.get(),
+            max: this.intMaxInstance
+        }
     }
 
 }
@@ -157,8 +168,8 @@ class _Bridge_UIToAsset<
         this.focus(this.ref);
     }
 
-    protected _$map = js.createMap<Record<any, _IData>>(true);
-    convert(ui: _T_UI_Id): _IData | undefined {
+    protected _$map = js.createMap<Record<any, _$IData>>(true);
+    convert(ui: _T_UI_Id): _$IData | undefined {
         let _out = this._$map[ui];
         if(!!_out) return _out;
 
@@ -177,7 +188,6 @@ class _Bridge_UIToAsset<
         for(const _ret of this._converters) {
             this._$map[_ret.ui] = _ret.get();
         }
-        console.log("[_Bridge_UIToAsset].{init} >> Done Inited: ", this)
     }
 }
 
@@ -209,7 +219,7 @@ export abstract class UI_Controller<
     protected bridge: _Bridge_UIToAsset<_T_UI_Id, _TAll> = new _Bridge_UIToAsset()
 
     protected _loader: Map<_T_UI_Id, Promise<Asset>> = new Map();
-    protected _pool: Map<_T_UI_Id, UI_IBase<_T_UI_Id, any>> = new Map()
+    protected _pool: Map<_T_UI_Id, UI_IBase<_T_UI_Id, any>[]> = new Map()
 
     @editor_property()
     protected _scene: _T_UI_Id = "" as _T_UI_Id
@@ -251,78 +261,81 @@ export abstract class UI_Controller<
         if(!this._list) {
             this.destroy();
 
-            console.warn("[UI.Controller] >> Should initiate the `_list`")
+            console.warn("[UI_Controller].{resetInEditor} >> WARN: Should initiate the `_list`")
             return;
         }
         this.onFocusInEditor();
     }
 
-    async open<_TWho extends UI_IBase<_T_UI_Id, any>>(id: _T_UI_Id, ...params: Parameters<_TWho['open']>) {
-        console.groupCollapsed("[UI_Controller].{open} >> Start Opening", "\nId: ", id, "\nParams: ", params, "\nThis: ", this);
+    protected async _open<_TWho extends UI_IBase<_T_UI_Id, any>>(_id: _T_UI_Id, _loading: boolean, _data: _$IData, params: Parameters<_TWho['open']>) {
+        _loading && this.loading.show(true);
 
-        let _ui = this._pool.get(id) as _TWho | undefined;
-        if(!!_ui?.isOpening) {
-            console.log("UI is already opended", _ui);
-            console.groupEnd();
-            return _ui
+        if(!_data) {
+            console.warn("[UI_Controller].{open} >> WARN: Invalid Id");
+            return null;
         }
-        this.loading.show(true);
 
+        let _prm = this._loader.get(_id);
+        if(!_prm) {
+            _prm = this.bundle.get(_data.bundle, _data.type, _data.path);
+        }
+        const _prefab = await _prm;
+        if(!(_prefab instanceof Prefab)) {
+            console.warn('[UI_Controller].{open} >> WARN: Invalid Typeof Asset', "\nAsset: ", _prefab);
+            return null;
+        }
+
+        const _node = instantiate(_prefab);
+        let _ui = _node.getComponent(UI_IBase.CCClass) as (Component & _TWho) | null;
         if(!_ui) {
-            const _data = this.bridge.convert(id);
-            if(!_data) {
-                console.warn("WARN >> Invalid Id");
-                console.groupEnd();
-                return null;
-            }
-
-            let _prm = this._loader.get(id);
-            if(!_prm) {
-                _prm = this.bundle.get(_data.bundle, _data.type, _data.path);
-            }
-            const _prefab = await _prm;
-            if(!(_prefab instanceof Prefab)) {
-                console.warn('WARN >> Invalid Typeof Asset', "\nAsset: ", _prefab);
-                console.groupEnd();
-                return null;
-            }
-
-            const _node = instantiate(_prefab);
-            _ui = _node.getComponent(UI_IBase.CCClass) as (Component & _TWho) | null;
-            if(!_ui) {
-                _node.destroy()
-                console.warn('WARN >> Asset does not contain UI_IBase', "\nComponent: ", _ui);
-                console.groupEnd();
-                return null;
-            }
-
-            _ui.link(this);
-
-            this._pool.set(id, _ui);
-
-            const _papa = _ui.isPopup ? this.popup : this.screen;
-            _papa.addChild(_node);
+            _node.destroy()
+            console.warn('[UI_Controller].{open} >> WARN: Asset does not contain UI_IBase', "\nComponent: ", _ui);
+            return null;
         }
 
-        //@ts-ignore disable eslint
+        _ui.link(this);
+
+        const _papa = _ui.isPopup ? this.popup : this.screen;
+        _papa.addChild(_node);
+
+        _loading && this.loading.show(false);
+
         await _ui.open(...params);
 
-        console.log("LOADED", _ui);
-        console.groupEnd();
-
-        this.loading.show(false);
         return _ui;
     }
 
+    async open<_TWho extends UI_IBase<_T_UI_Id, any>>(opt: _$IOpenOpt<_T_UI_Id>, ...params: Parameters<_TWho['open']>) {
+        const [_id, _loading] = (typeof opt === 'object' ? [opt.id, opt.loading] : [opt, true]) as [_T_UI_Id, boolean];
+
+        const _data = this.bridge.convert(_id);
+        let _uis = this._pool.get(_id) as _TWho[];
+        if(!_uis) {
+            _uis = [];
+            this._pool.set(_id, _uis);
+        }
+
+        if(_uis.length >= _data.max) {
+            for(const _ui of _uis) !_ui.isOpening && _ui.open(...params);
+            return _uis;
+        }
+
+        const _out: _TWho = await this._open(_id, _loading, _data, params);
+        _uis.push(_out);
+
+        _loading && this.loading.show(false);
+        await Promise.all(_uis.map(_ => _.open(...params)));
+
+        return _uis;
+    }
+
     async close<_TWho extends UI_IBase<_T_UI_Id, any>>(id: _T_UI_Id, ...params: Parameters<_TWho["close"]>): Promise<void> {
-        const _ui = this._pool.get(id);
-        if(!_ui) return;
-        if(!_ui.isOpening) return;
+        const _uis = this._pool.get(id);
+        if(!_uis) return;
 
         this.loading.show(true);
 
-        //@ts-ignore disable eslint
-        await _ui.close(...params);
+        await Promise.all(_uis.map(_ => _.close(...params)));
         this.loading.show(false);
     }
 
@@ -383,9 +396,11 @@ export abstract class UI_Controller<
 
         if(!!this.dark) {
             let _is = false;
-            this._pool.forEach(_ => {
-                if(_.isPopup && _.isOpening) {
-                    _is = true;
+            this._pool.forEach(_uis => {
+                for(const _ui of _uis) {
+                    if(_ui.isPopup && _ui.isOpening) {
+                        _is = true;
+                    }
                 }
             })
             this.dark.active = !_is;

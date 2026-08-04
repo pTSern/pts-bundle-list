@@ -1,4 +1,4 @@
-import { _decorator, CCString, Component, Enum, log, Node } from "cc";
+import { _decorator, CCString, Component, log, Node } from "cc";
 import { pArray, pConst } from "db://pts-core/scripts/utils";
 import { Event_Driver } from "db://pts-core/scripts/Components/Event/Event.Driver";
 import { UI_IBase, UI_ICloseOpt, UI_IOpenOpt, UI_TParams } from "../../../interfaces/Components/UI/UI.IBase";
@@ -63,7 +63,7 @@ export abstract class UI_Base<
         this.emit('onBeforeOpen', ...args);
         this._onBeforeOpen?.();
 
-        const _out = await (this._opener ? this._opener(...args) : ( this.root.active = true, pConst.RESOLVER ))
+        const _out = this._opener ? await this._opener(...args) : this.root.active = true;
         this.emit('onAfterOpen', ...args);
         this._onAfterOpen?.();
 
@@ -94,7 +94,7 @@ export abstract class UI_Base<
 
         this._owner.setup(this, false, opt);
 
-        const _out = await (this._opener ? this._closer(...args) : ( this.root.active = false, pConst.RESOLVER ))
+        const _out = this._closer ? await this._closer(...args) : this.root.active = false;
         this.emit('onAfterClose', ...args);
         this._onAfterClose?.();
 
