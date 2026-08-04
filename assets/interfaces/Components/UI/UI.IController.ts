@@ -18,6 +18,9 @@ export interface UI_IController<
     setup(target: UI_IBase<_T_UI_Id, any>, open: true, opt: UI_IOpenOpt<_T_UI_Id>): void
     setup(target: UI_IBase<_T_UI_Id, any>, open: boolean, opt: UI_ICloseOpt | UI_IOpenOpt<_T_UI_Id>): void
 
+    get(id: _T_UI_Id): UI_IBase<_T_UI_Id, any>[]
+    preload(id: pFlex.TArray<_T_UI_Id>, ...ids: _T_UI_Id[]): void
+
 }
 
 export const UI_IController = Object.assign(js.createMap(true), {

@@ -63,12 +63,12 @@ export abstract class UI_Base<
         this.emit('onBeforeOpen', ...args);
         this._onBeforeOpen?.();
 
+        this._isOpened = true;
+        this._owner.setup(this, true, opt);
+
         const _out = this._opener ? await this._opener(...args) : this.root.active = true;
         this.emit('onAfterOpen', ...args);
         this._onAfterOpen?.();
-
-        this._owner.setup(this, true, opt);
-        this._isOpened = true;
 
         return _out as ReturnType<_TParams["open"]>;
     }
@@ -92,13 +92,12 @@ export abstract class UI_Base<
         this.emit('onBeforeClose', ...args);
         this._onBeforeClose?.();
 
+        this._isOpened = false;
         this._owner.setup(this, false, opt);
 
         const _out = this._closer ? await this._closer(...args) : this.root.active = false;
         this.emit('onAfterClose', ...args);
         this._onAfterClose?.();
-
-        this._isOpened = false;
 
         return _out as ReturnType<_TParams["close"]>
     }

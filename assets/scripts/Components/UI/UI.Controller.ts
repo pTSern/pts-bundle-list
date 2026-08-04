@@ -220,6 +220,7 @@ export abstract class UI_Controller<
 
     protected _loader: Map<_T_UI_Id, Promise<Asset>> = new Map();
     protected _pool: Map<_T_UI_Id, UI_IBase<_T_UI_Id, any>[]> = new Map()
+    protected _pending: Map<_T_UI_Id, number> = new Map()
 
     @editor_property()
     protected _scene: _T_UI_Id = "" as _T_UI_Id
@@ -278,6 +279,7 @@ export abstract class UI_Controller<
         let _prm = this._loader.get(_id);
         if(!_prm) {
             _prm = this.bundle.get(_data.bundle, _data.type, _data.path);
+            this._loader.set(_id, _prm);
         }
         const _prefab = await _prm;
         if(!(_prefab instanceof Prefab)) {
@@ -309,22 +311,32 @@ export abstract class UI_Controller<
         const [_id, _loading] = (typeof opt === 'object' ? [opt.id, opt.loading] : [opt, true]) as [_T_UI_Id, boolean];
 
         const _data = this.bridge.convert(_id);
+        if(!_data) {
+            console.warn("[UI_Controller].{open} >> WARN: Invalid Id");
+            return [];
+        }
+
         let _uis = this._pool.get(_id) as _TWho[];
         if(!_uis) {
             _uis = [];
             this._pool.set(_id, _uis);
         }
 
-        if(_uis.length >= _data.max) {
-            for(const _ui of _uis) !_ui.isOpening && _ui.open(...params);
+        const _pending = this._pending.get(_id) ?? 0;
+        if(_data.max > 0 && _uis.length + _pending >= _data.max) {
+            const _promises: Promise<any>[] = [];
+            for(const _ui of _uis) !_ui.isOpening && _promises.push(_ui.open(...params));
+            await Promise.all(_promises);
             return _uis;
         }
 
-        const _out: _TWho = await this._open(_id, _loading, _data, params);
-        _uis.push(_out);
-
-        _loading && this.loading.show(false);
-        await Promise.all(_uis.map(_ => _.open(...params)));
+        this._pending.set(_id, _pending + 1);
+        try {
+            const _out: _TWho = await this._open(_id, _loading, _data, params);
+            if(_out) _uis.push(_out);
+        } finally {
+            this._pending.set(_id, (this._pending.get(_id) ?? 1) - 1);
+        }
 
         return _uis;
     }
@@ -340,11 +352,17 @@ export abstract class UI_Controller<
     }
 
     get(id: _T_UI_Id) {
-
+        return (this._pool.get(id) ?? []) as UI_IBase<_T_UI_Id, any>[];
     }
 
     preload(id: pFlex.TArray<_T_UI_Id>, ...ids: _T_UI_Id[]) {
-
+        const _ids: _T_UI_Id[] = Array.isArray(id) ? [...id, ...ids] : [id, ...ids];
+        for(const _id of _ids) {
+            if(this._loader.has(_id)) continue;
+            const _data = this.bridge.convert(_id);
+            if(!_data) continue;
+            this._loader.set(_id, this.bundle.get(_data.bundle, _data.type, _data.path));
+        }
     }
 
     setup(target: UI_IBase<_T_UI_Id, any>, open: false, opt: UI_ICloseOpt): void;
@@ -400,10 +418,11 @@ export abstract class UI_Controller<
                 for(const _ui of _uis) {
                     if(_ui.isPopup && _ui.isOpening) {
                         _is = true;
+                        return;
                     }
                 }
-            })
-            this.dark.active = !_is;
+            });
+            this.dark.active = _is;
         }
     }
 
