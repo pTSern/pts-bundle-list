@@ -2,22 +2,24 @@ declare namespace pTS {
 	export namespace bundle {
 		export namespace list {
 			enum Enum_game_Prefab {
+				"daily_reward/prefabs/DailyReward_Popup" = "daily_reward/prefabs/DailyReward_Popup",
 				"profile/prefabs/Profile_Popup" = "profile/prefabs/Profile_Popup",
 				"$shared/avatar/prefabs/avatar" = "$shared/avatar/prefabs/avatar",
 				"$shared/avatar/prefabs/Avatar_UI" = "$shared/avatar/prefabs/Avatar_UI",
 				"$shared/avatar/prefabs/frame" = "$shared/avatar/prefabs/frame",
 				"$shared/builder/prefabs/Builder_UI" = "$shared/builder/prefabs/Builder_UI",
 				"$shared/coin/prefabs/Coin_UI" = "$shared/coin/prefabs/Coin_UI",
+				"$shared/diamond_hunt_process/prefabs/$_data" = "$shared/diamond_hunt_process/prefabs/$_data",
+				"$shared/diamond_hunt_process/prefabs/DiamondHuntProcess_UI" = "$shared/diamond_hunt_process/prefabs/DiamondHuntProcess_UI",
 				"$shared/heart/prefabs/Heart_UI" = "$shared/heart/prefabs/Heart_UI",
 				"$shared/settings/prefabs/Setting_UI" = "$shared/settings/prefabs/Setting_UI",
 				"$shared/star/prefabs/Star_UI" = "$shared/star/prefabs/Star_UI",
 				"$shared/start_game/prefabs/StartGame_UI" = "$shared/start_game/prefabs/StartGame_UI",
+				"decorator/$builder/prefabs/Decorator_Builder_UI" = "decorator/$builder/prefabs/Decorator_Builder_UI",
+				"decorator/$level/prefabs/item_ui" = "decorator/$level/prefabs/item_ui",
 				"home_screen/$main_page/prefabs/HomeScreen_Page_Home" = "home_screen/$main_page/prefabs/HomeScreen_Page_Home",
 				"home_screen/_$shared/prefabs/home_screen" = "home_screen/_$shared/prefabs/home_screen",
-				"$shared/diamond_hunt_process/prefabs/DiamondHuntProcess_UI" = "$shared/diamond_hunt_process/prefabs/DiamondHuntProcess_UI",
-				"$shared/diamond_hunt_process/prefabs/$_data" = "$shared/diamond_hunt_process/prefabs/$_data",
-				"decorator/$builder/prefabs/Decorator_Builder_UI" = "decorator/$builder/prefabs/Decorator_Builder_UI",
-				"decorator/$level/prefabs/item_ui" = "decorator/$level/prefabs/item_ui"
+				"daily_reward/prefabs/RewardItem_UI" = "daily_reward/prefabs/RewardItem_UI"
 			}
 			enum Enum_wonder_match_Prefab {
 			}
