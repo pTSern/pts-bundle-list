@@ -11,7 +11,7 @@ export interface UI_IController<
     get isValid(): boolean
     get bundle(): Bundle_Manager<_TAll>;
 
-    open<_TWho extends UI_IBase<_T_UI_Id, any>>(id: _T_UI_Id, ...params: Parameters<_TWho['open']>): Promise<_TWho | null>
+    open<_TWho extends UI_IBase<_T_UI_Id, any>>(id: _T_UI_Id, ...params: Parameters<_TWho['open']>): Promise<_TWho[]>
     close<_TWho extends UI_IBase<_T_UI_Id, any>>(id: _T_UI_Id, ...params: Parameters<_TWho['close']>): Promise<void>
 
     setup(target: UI_IBase<_T_UI_Id, any>, open: false, opt: UI_ICloseOpt): void
