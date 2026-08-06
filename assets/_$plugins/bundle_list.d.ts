@@ -3,6 +3,7 @@ declare namespace pTS {
 		export namespace list {
 			enum Enum_game_Prefab {
 				"daily_reward/prefabs/DailyReward_Popup" = "daily_reward/prefabs/DailyReward_Popup",
+				"daily_reward/prefabs/RewardItem_UI" = "daily_reward/prefabs/RewardItem_UI",
 				"profile/prefabs/Profile_Popup" = "profile/prefabs/Profile_Popup",
 				"$shared/avatar/prefabs/avatar" = "$shared/avatar/prefabs/avatar",
 				"$shared/avatar/prefabs/Avatar_UI" = "$shared/avatar/prefabs/Avatar_UI",
@@ -18,8 +19,7 @@ declare namespace pTS {
 				"decorator/$builder/prefabs/Decorator_Builder_UI" = "decorator/$builder/prefabs/Decorator_Builder_UI",
 				"decorator/$level/prefabs/item_ui" = "decorator/$level/prefabs/item_ui",
 				"home_screen/$main_page/prefabs/HomeScreen_Page_Home" = "home_screen/$main_page/prefabs/HomeScreen_Page_Home",
-				"home_screen/_$shared/prefabs/HomeScreen_Popup" = "home_screen/_$shared/prefabs/HomeScreen_Popup",
-				"daily_reward/prefabs/RewardItem_UI" = "daily_reward/prefabs/RewardItem_UI"
+				"home_screen/_$shared/prefabs/HomeScreen_Popup" = "home_screen/_$shared/prefabs/HomeScreen_Popup"
 			}
 			enum Enum_wonder_match_Prefab {
 			}
