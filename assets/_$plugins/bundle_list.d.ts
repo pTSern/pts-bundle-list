@@ -19,7 +19,8 @@ declare namespace pTS {
 				"decorator/$builder/prefabs/Decorator_Builder_UI" = "decorator/$builder/prefabs/Decorator_Builder_UI",
 				"decorator/$level/prefabs/item_ui" = "decorator/$level/prefabs/item_ui",
 				"home_screen/$main_page/prefabs/HomeScreen_Page_Home" = "home_screen/$main_page/prefabs/HomeScreen_Page_Home",
-				"home_screen/_$shared/prefabs/HomeScreen_Popup" = "home_screen/_$shared/prefabs/HomeScreen_Popup"
+				"home_screen/_$shared/prefabs/HomeScreen_Popup" = "home_screen/_$shared/prefabs/HomeScreen_Popup",
+				"daily_reward/prefabs/DailyReward_Btn_UI" = "daily_reward/prefabs/DailyReward_Btn_UI"
 			}
 			enum Enum_wonder_match_Prefab {
 			}
