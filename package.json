@@ -32,6 +32,13 @@
         }
     },
     "contributions": {
+        "inspector": {
+            "section": {
+                "node": {
+                    "Btn_Opener": "./inspector/button.js"
+                }
+            }
+        },
         "profile": {
             "project": {
                 "global_variable_key": {

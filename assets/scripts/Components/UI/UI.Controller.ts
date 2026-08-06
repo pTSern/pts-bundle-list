@@ -8,6 +8,7 @@ import { UI_IBase, UI_ICloseOpt, UI_IOpenOpt } from "../../../interfaces/Compone
 import { UI_IController } from "db://pts-bundle-list/interfaces/Components/UI/UI.IController";
 import { Helper_UI_Loader } from "db://pts-core/scripts/helper/UI/Helper.UI.Loader";
 import { editor_property } from "db://pts-core/scripts/utils/pClass";
+import { Helper_IdSelector } from "db://pts-core/scripts/helper/Helper.IdSelector";
 
 const { ccclass, property } = _decorator;
 
@@ -191,11 +192,25 @@ class _Bridge_UIToAsset<
     }
 }
 
+const _$pool = js.createMap(true);
+
 @ccclass("UI_Controller")
 export abstract class UI_Controller<
     _T_UI_Id extends pFlex.TKey,
     _TAll extends Record<string, Record<pFlex.TKey, any>>
 > extends Event_Driver<{}> implements UI_IController<_T_UI_Id, _TAll> {
+
+    static get(id: string) {
+        return _$pool[id] as UI_Controller<any, any> | undefined;
+    }
+
+    static register(who: UI_Controller<any, any>) {
+        if(!who) return;
+        _$pool[who.sid.sid] = who;
+    }
+
+    @property({ type: Helper_IdSelector, group: pConst.GROUPS.CORE })
+    sid: Helper_IdSelector = new Helper_IdSelector();
 
     @property({ type: Node, group: pConst.GROUPS.CORE })
     screen: Node = null
@@ -231,6 +246,7 @@ export abstract class UI_Controller<
     protected __preload(): void {
         this._actSetupLoading();
         this.dark && ( this.dark.active = false )
+        UI_Controller.register(this);
     }
 
     protected _actSetupLoading() {
