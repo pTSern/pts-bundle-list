@@ -2,13 +2,14 @@ declare namespace pTS {
 	export namespace bundle {
 		export namespace list {
 			enum Enum_game_Prefab {
+				"daily_reward/prefabs/DailyReward_Btn" = "daily_reward/prefabs/DailyReward_Btn",
 				"daily_reward/prefabs/DailyReward_Popup" = "daily_reward/prefabs/DailyReward_Popup",
 				"daily_reward/prefabs/RewardItem_UI" = "daily_reward/prefabs/RewardItem_UI",
 				"profile/prefabs/Profile_Popup" = "profile/prefabs/Profile_Popup",
 				"$shared/avatar/prefabs/avatar" = "$shared/avatar/prefabs/avatar",
 				"$shared/avatar/prefabs/Avatar_UI" = "$shared/avatar/prefabs/Avatar_UI",
 				"$shared/avatar/prefabs/frame" = "$shared/avatar/prefabs/frame",
-				"$shared/builder/prefabs/Builder_UI" = "$shared/builder/prefabs/Builder_UI",
+				"$shared/builder/prefabs/Builder_Btn" = "$shared/builder/prefabs/Builder_Btn",
 				"$shared/coin/prefabs/Coin_UI" = "$shared/coin/prefabs/Coin_UI",
 				"$shared/diamond_hunt_process/prefabs/$_data" = "$shared/diamond_hunt_process/prefabs/$_data",
 				"$shared/diamond_hunt_process/prefabs/DiamondHuntProcess_UI" = "$shared/diamond_hunt_process/prefabs/DiamondHuntProcess_UI",
@@ -20,7 +21,7 @@ declare namespace pTS {
 				"decorator/$level/prefabs/item_ui" = "decorator/$level/prefabs/item_ui",
 				"home_screen/$main_page/prefabs/HomeScreen_Page_Home" = "home_screen/$main_page/prefabs/HomeScreen_Page_Home",
 				"home_screen/_$shared/prefabs/HomeScreen_Popup" = "home_screen/_$shared/prefabs/HomeScreen_Popup",
-				"daily_reward/prefabs/DailyReward_Btn_UI" = "daily_reward/prefabs/DailyReward_Btn_UI"
+				"decorator/level_1/prefab/level_1" = "decorator/level_1/prefab/level_1"
 			}
 			enum Enum_wonder_match_Prefab {
 			}
