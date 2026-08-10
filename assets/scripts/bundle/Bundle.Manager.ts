@@ -52,6 +52,10 @@ export class Bundle_Manager<
         return this._bundle.get(key)
     }
 
+    glazy<_TAsset>(bundle: string, type: string, asset: string): Promise<_TAsset> {
+        return this.get(bundle as any, type as any, asset as any) as Promise<_TAsset>
+    }
+
     get<
         _TKey extends keyof _TAll,
         _TType extends keyof _TAll[_TKey],
