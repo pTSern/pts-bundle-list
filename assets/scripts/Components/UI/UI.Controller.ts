@@ -21,15 +21,13 @@ interface _$IData {
 
 @ccclass("_Bridge_Asseter")
 class _Bridge_Asseter {
+
     @property({ type: Enum({}), group: pConst.GROUPS.EDITOR })
     get bundle() { return this._bundle }
     set bundle(x) {
         this._bundle = x;
         this._actUpdateType();
     }
-
-    @property({ type: Component, readonly: true, group: pConst.GROUPS.DETAIL })
-    ref: UI_Controller<any, any> = null
 
     @property({ visible() { return this._bundle }, readonly: true, group: pConst.GROUPS.DETAIL })
     protected _bundle: string = ''
@@ -51,11 +49,12 @@ class _Bridge_Asseter {
     set asset(x) {
         this._asset = x
     }
+    protected _manager: Bundle_Manager<any>;
 
     protected _actUpdateType() {
-        if(!this.ref?.bundle) return;
+        if(!this._manager) return;
 
-        const _type = this.ref.bundle.all[this._bundle];
+        const _type = this._manager.all[this._bundle];
         if(!_type) return;
 
         const _types = Object.keys(_type).map(_ => ({ name: _, value: _ }))
@@ -63,9 +62,9 @@ class _Bridge_Asseter {
     }
 
     protected _actUpdateAsset() {
-        if(!this.ref?.bundle) return;
+        if(!this._manager) return;
 
-        const _type = this.ref.bundle.all[this._bundle];
+        const _type = this._manager.all[this._bundle];
         if(!_type) return;
 
         const _asset = _type[this._type]
@@ -75,15 +74,15 @@ class _Bridge_Asseter {
         CCClass.Attr.setClassAttr(this, 'asset', 'enumList', _types)
     }
 
-    focus(ref: UI_Controller<any, any>) {
-        this.ref = ref;
+    focus(ref: Bundle_Manager<any>, hides: (keyof _Bridge_Asseter)[] = []) {
+        this._manager = ref;
 
-        if(!this.ref?.bundle) return;
-
-        const _keys = Object.keys(this.ref.bundle.all).map(_ => ({ name: _, value: _ }));
+        const _keys = Object.keys(this._manager.all).map(_ => ({ name: _, value: _ }));
 
         CCClass.Attr.setClassAttr(this, 'bundle', 'enumList', _keys)
-        this._actUpdateType();
+        for(const _hide of hides) {
+            CCClass.Attr.setClassAttr(this, _hide, 'visible', false);
+        }
         this._actUpdateAsset();
     }
 
@@ -123,7 +122,7 @@ class _Bridge_Converter<
 
     focus(ref: UI_Controller<_T_UI_Id, _TAll>) {
         CCClass.Attr.setClassAttr(this, 'ui', 'enumList', ref?.list || []);
-        this.asseter.focus(ref);
+        this.asseter.focus(ref?.bundle);
     }
 
     is(ui: _T_UI_Id) { return ui === this._ui }
@@ -445,4 +444,9 @@ export abstract class UI_Controller<
     protected update(dt: number): void {
         this.loading.update(dt);
     }
+}
+
+export namespace UI_Controller {
+    export const Bridge = _Bridge_Asseter;
+    export type Bridge = _Bridge_Asseter;
 }

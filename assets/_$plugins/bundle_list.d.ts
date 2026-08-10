@@ -21,11 +21,15 @@ declare namespace pTS {
 				"$shared/start_game/prefabs/StartGame_UI" = "$shared/start_game/prefabs/StartGame_UI",
 				"decorator/$builder/prefabs/Decorator_Builder_UI" = "decorator/$builder/prefabs/Decorator_Builder_UI",
 				"decorator/$level/prefabs/item_ui" = "decorator/$level/prefabs/item_ui",
-				"decorator/level_1/prefab/level_1" = "decorator/level_1/prefab/level_1",
+				"decorator/level_1/prefab/Level_UI_1" = "decorator/level_1/prefab/Level_UI_1",
 				"home_screen/$areas_page/prefabs/HomeScreen_Page_Areas" = "home_screen/$areas_page/prefabs/HomeScreen_Page_Areas",
 				"home_screen/$main_page/prefabs/HomeScreen_Page_Home" = "home_screen/$main_page/prefabs/HomeScreen_Page_Home",
 				"home_screen/_$shared/prefabs/HomeScreen_NavBar" = "home_screen/_$shared/prefabs/HomeScreen_NavBar",
-				"home_screen/_$shared/prefabs/HomeScreen_Popup" = "home_screen/_$shared/prefabs/HomeScreen_Popup"
+				"home_screen/_$shared/prefabs/HomeScreen_Popup" = "home_screen/_$shared/prefabs/HomeScreen_Popup",
+				"decorator/level_1/prefab/$_config_level_1" = "decorator/level_1/prefab/$_config_level_1",
+				"decorator/$builder/prefabs/$_data" = "decorator/$builder/prefabs/$_data",
+				"decorator/level_2/prefab/$_config_level_2" = "decorator/level_2/prefab/$_config_level_2",
+				"decorator/level_2/prefab/Level_UI_2" = "decorator/level_2/prefab/Level_UI_2"
 			}
 			enum Enum_wonder_match_Prefab {
 			}
