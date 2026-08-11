@@ -29,7 +29,8 @@ declare namespace pTS {
 				"home_screen/$areas_page/prefabs/HomeScreen_Page_Areas" = "home_screen/$areas_page/prefabs/HomeScreen_Page_Areas",
 				"home_screen/$main_page/prefabs/HomeScreen_Page_Home" = "home_screen/$main_page/prefabs/HomeScreen_Page_Home",
 				"home_screen/_$shared/prefabs/HomeScreen_NavBar" = "home_screen/_$shared/prefabs/HomeScreen_NavBar",
-				"home_screen/_$shared/prefabs/HomeScreen_Popup" = "home_screen/_$shared/prefabs/HomeScreen_Popup"
+				"home_screen/_$shared/prefabs/HomeScreen_Popup" = "home_screen/_$shared/prefabs/HomeScreen_Popup",
+				"message_notifier/prefabs/message" = "message_notifier/prefabs/message"
 			}
 			enum Enum_wonder_match_Prefab {
 			}
