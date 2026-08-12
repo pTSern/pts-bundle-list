@@ -1,5 +1,5 @@
-import { _decorator, CCString, Component, log, Node } from "cc";
-import { pArray, pConst } from "db://pts-core/scripts/utils";
+import { _decorator, Button, CCString, Component, log, Node } from "cc";
+import { pArray, pConst, pEngine } from "db://pts-core/scripts/utils";
 import { Event_Driver } from "db://pts-core/scripts/Components/Event/Event.Driver";
 import { UI_IBase, UI_ICloseOpt, UI_IOpenOpt, UI_TParams } from "../../../interfaces/Components/UI/UI.IBase";
 import { UI_IController } from "db://pts-bundle-list/interfaces/Components/UI/UI.IController";
@@ -49,6 +49,23 @@ export abstract class UI_Base<
     link(owner: UI_IController<any, any>): void {
         if(!!this._owner) return;
         this._owner = owner;
+    }
+
+    protected _actBindingButton(_target: pFlex.TArray<pEngine.TFlexTarget>, _handlers: pFlex.TArray<pFlex.TFunc>, _capture?: any) {
+        pEngine.CompUtils.appends({
+            _type: Button.EventType.CLICK,
+            _binder: this,
+            _options: { _handlers, _target, _capture }
+        })
+    }
+
+    protected _actBindingButtons(opt: pFlex.TArray<pEngine.IEventTarget>, ...opts: pEngine.IEventTarget[]) {
+        opts = pArray.flat(opt, opts);
+        pEngine.CompUtils.appends({
+            _type: Button.EventType.CLICK,
+            _binder: this,
+            _options: opts
+        })
     }
 
     protected __preload(): void {

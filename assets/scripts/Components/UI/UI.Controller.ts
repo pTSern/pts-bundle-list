@@ -338,14 +338,19 @@ export abstract class UI_Controller<
         }
 
         const _pending = this._pending.get(_id) ?? 0;
+
+        // Increment pending BEFORE the guard check's await, to prevent race conditions
+        // where multiple concurrent open() calls all read _pending=0 and bypass the max limit.
+        this._pending.set(_id, _pending + 1);
+
         if(_data.max > 0 && _uis.length + _pending >= _data.max) {
+            this._pending.set(_id, (this._pending.get(_id) ?? 1) - 1);
             const _promises: Promise<any>[] = [];
             for(const _ui of _uis) !_ui.isOpening && _promises.push(_ui.open(...params));
             await Promise.all(_promises);
             return _uis;
         }
 
-        this._pending.set(_id, _pending + 1);
         try {
             const _out: _TWho = await this._open(_id, _loading, _data, params);
             if(_out) _uis.push(_out);

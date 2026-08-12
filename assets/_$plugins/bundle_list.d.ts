@@ -2,9 +2,11 @@ declare namespace pTS {
 	export namespace bundle {
 		export namespace list {
 			enum Enum_game_Prefab {
+				"daily_reward/prefabs/$_DailyReward_UI_Config" = "daily_reward/prefabs/$_DailyReward_UI_Config",
 				"daily_reward/prefabs/DailyReward_Btn" = "daily_reward/prefabs/DailyReward_Btn",
 				"daily_reward/prefabs/DailyReward_Popup" = "daily_reward/prefabs/DailyReward_Popup",
 				"daily_reward/prefabs/RewardItem_UI" = "daily_reward/prefabs/RewardItem_UI",
+				"message_notifier/prefabs/message" = "message_notifier/prefabs/message",
 				"profile/prefabs/Profile_Popup" = "profile/prefabs/Profile_Popup",
 				"$shared/area/prefabs/AreaItem_UI" = "$shared/area/prefabs/AreaItem_UI",
 				"$shared/area/prefabs/ArenaItem_Config" = "$shared/area/prefabs/ArenaItem_Config",
@@ -30,7 +32,12 @@ declare namespace pTS {
 				"home_screen/$main_page/prefabs/HomeScreen_Page_Home" = "home_screen/$main_page/prefabs/HomeScreen_Page_Home",
 				"home_screen/_$shared/prefabs/HomeScreen_NavBar" = "home_screen/_$shared/prefabs/HomeScreen_NavBar",
 				"home_screen/_$shared/prefabs/HomeScreen_Popup" = "home_screen/_$shared/prefabs/HomeScreen_Popup",
-				"message_notifier/prefabs/message" = "message_notifier/prefabs/message"
+				"item/prefabs/$_Item_Visualize_Config" = "item/prefabs/$_Item_Visualize_Config",
+				"daily_reward/prefabs/DailyReward_Item" = "daily_reward/prefabs/DailyReward_Item",
+				"daily_reward/prefabs/$_DailyReward_Popup_Config" = "daily_reward/prefabs/$_DailyReward_Popup_Config"
+			}
+			enum Enum_test_Prefab {
+				"fabs/_fab" = "fabs/_fab"
 			}
 			enum Enum_wonder_match_Prefab {
 			}
@@ -39,16 +46,20 @@ declare namespace pTS {
 				game: {
 					Prefab: typeof Enum_game_Prefab;
 				}
+				test: {
+					Prefab: typeof Enum_test_Prefab;
+				}
 				wonder_match: {
 					Prefab: typeof Enum_wonder_match_Prefab;
 				}
 			}
 
 			export namespace bundle {
-				export const list: ["game", "wonder_match"];
+				export const list: ["game", "test", "wonder_match"];
 				export type TType = typeof list[number];
 				export enum Enum {
 					game = "game",
+					test = "test",
 					wonder_match = "wonder_match"
 				}
 				export const CCEnums: { name: TType; value: TType }[];
