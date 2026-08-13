@@ -314,6 +314,13 @@ export abstract class UI_Controller<
 
         const _papa = _ui.isPopup ? this.popup : this.screen;
         _papa.addChild(_node);
+        if(!_ui.isPopup) {
+            const _others = _papa.getComponentsInChildren(UI_IBase.CCClass) as (Component & _TWho)[];
+
+            for(const _other of _others) {
+                _other?.close();
+            }
+        }
 
         _loading && this.loading.show(false);
 

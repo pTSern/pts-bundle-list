@@ -34,7 +34,6 @@ export abstract class Btn_Opener<_T_UI_Id extends pFlex.TKey> extends Button {
     @property({ type: _UI_Selector })
     controller = new _UI_Selector<_T_UI_Id>();
 
-
     protected abstract _list: CC_IEnumList<_T_UI_Id, _T_UI_Id>[]  | CC_IEnumable<_T_UI_Id> | _T_UI_Id[]
     get list() { return CC_EnumList(this._list) }
 
