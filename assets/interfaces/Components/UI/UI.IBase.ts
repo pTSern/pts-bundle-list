@@ -39,7 +39,7 @@ export interface UI_IBase<
     close(opt?: UI_ICloseOpt, ...args: Parameters<_TParams['close']>): Promise<ReturnType<_TParams['close']>>
     setBackUp(id: _TId[], once: boolean): void
     setDrawOrder(zIndex: number): void
-    actOpenBackUp(): void
+    actOpenBackUp(): Promise<void>
     actDestroyCompletly(): void
 }
 

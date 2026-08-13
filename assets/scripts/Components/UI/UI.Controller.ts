@@ -313,7 +313,6 @@ export abstract class UI_Controller<
         _ui.link(this);
 
         const _papa = _ui.isPopup ? this.popup : this.screen;
-        _papa.addChild(_node);
         if(!_ui.isPopup) {
             const _others = _papa.getComponentsInChildren(UI_IBase.CCClass) as (Component & _TWho)[];
 
@@ -321,6 +320,7 @@ export abstract class UI_Controller<
                 _other?.close();
             }
         }
+        _papa.addChild(_node);
 
         _loading && this.loading.show(false);
 
@@ -353,10 +353,14 @@ export abstract class UI_Controller<
         if(_data.max > 0 && _uis.length + _pending >= _data.max) {
             this._pending.set(_id, (this._pending.get(_id) ?? 1) - 1);
             const _promises: Promise<any>[] = [];
-            for(const _ui of _uis) !_ui.isOpening && _promises.push(_ui.open(...params));
+            for(const _ui of _uis) {
+                !_ui.isOpening && _promises.push(_ui.open(...params));
+                console.log("[UI_Controller].{open} >> WARN: Max instance reached for UI", _id, " (max:", _data.max, ", current:", _uis.length, ", pending:", _pending, ")", _ui);
+            }
             await Promise.all(_promises);
             return _uis;
         }
+        //this._pending.set(_id, _pending + 1);
 
         try {
             const _out: _TWho = await this._open(_id, _loading, _data, params);
@@ -432,12 +436,11 @@ export abstract class UI_Controller<
     protected _onCloseUI(target: UI_IBase<_T_UI_Id, any>, opt: UI_ICloseOpt) {
         if(!target || !target.isValid) return;
 
-        if(!!opt) {
-            const { isNotOpenBackUp, isForceDestroy } = opt;
+        const { isNotOpenBackUp, isForceDestroy } = opt || { isNotOpenBackUp: false, isForceDestroy: false };
 
-            !isNotOpenBackUp && target.actOpenBackUp();
-            isForceDestroy && target.actDestroyCompletly();
-        }
+        console.log("[UI_Controller] _onCloseUI >>", target.tid, " isNotOpenBackUp: ", isNotOpenBackUp, " isForceDestroy: ", isForceDestroy, opt);
+        !isNotOpenBackUp && target.actOpenBackUp();
+        isForceDestroy && target.actDestroyCompletly();
 
         if(!!this.dark) {
             let _is = false;
