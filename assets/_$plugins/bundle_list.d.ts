@@ -53,7 +53,8 @@ declare namespace pTS {
 				"game_play/characters/anna/fbx/Anim_LV11-17/Anim_LV11-17" = "game_play/characters/anna/fbx/Anim_LV11-17/Anim_LV11-17",
 				"game_play/characters/anna/fbx/Dar_Anna/Dar_Anna" = "game_play/characters/anna/fbx/Dar_Anna/Dar_Anna",
 				"game_play/characters/ella/fbx/Ella/Ella" = "game_play/characters/ella/fbx/Ella/Ella",
-				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22"
+				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22",
+				"$shared/settings/prefabs/Setting_Popup" = "$shared/settings/prefabs/Setting_Popup"
 			}
 			enum Enum_test_Prefab {
 				"fabs/_fab" = "fabs/_fab"

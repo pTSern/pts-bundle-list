@@ -18,11 +18,11 @@ class _UI_Selector<_T_UI_Id extends pFlex.TKey> {
         if(this._controller) return this._controller;
 
         const _id = this.sid.sid;
-        let _out = UI_Controller.get(_id);
+        this._controller = UI_Controller.get(_id);
 
-        if(!!_out) return _out;
-        _out = director.getScene().getComponentInChildren(UI_Controller) as UI_Controller<_T_UI_Id, any>;
-        return _out;
+        if(!!this._controller) return this._controller;
+        this._controller = director.getScene().getComponentInChildren(UI_Controller) as UI_Controller<_T_UI_Id, any>;
+        return this._controller;
     }
 }
 
@@ -65,6 +65,6 @@ export abstract class Btn_Opener<_T_UI_Id extends pFlex.TKey> extends Button {
     protected _actClick() {
         const _controller = this.controller.get();
         if(!_controller) return;
-        _controller.open(this.ui);
+        _controller.open(this.ui, {});
     }
 }

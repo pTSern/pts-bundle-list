@@ -90,19 +90,16 @@ export abstract class UI_Base<
         return _out as ReturnType<_TParams["open"]>;
     }
 
-    actOpenBackUp(): void {
-        for(const _id of this.backups) {
-            this._owner.open(_id, {});
-        }
+    async actOpenBackUp() {
+        console.log('[UI_Base] actOpenBackUp >>', this, ' opened backups ', this.backups, ' and once backups ', this._arrBackUpOnce, this._owner);
 
-        for(const _id of this._arrBackUpOnce) {
-            this._owner.open(_id, {})
-        }
+        const _list = pArray.unique([...this.backups, ...this._arrBackUpOnce], _ => _ !== this.tid);
+        await Promise.all(_list.map(_ => this._owner.open(_, {})))
 
         this._arrBackUpOnce = []
     }
 
-    async close(opt: UI_ICloseOpt, ...args: Parameters<_TParams["close"]>): Promise<ReturnType<_TParams["close"]>> {
+    async close(opt?: UI_ICloseOpt, ...args: Parameters<_TParams["close"]>): Promise<ReturnType<_TParams["close"]>> {
         if(!this._owner || !this._owner.isValid) return;
         DEV && log('[UI_Base] Close >>', this, " with opt ", opt, ' args ', ...args);
 
@@ -112,6 +109,7 @@ export abstract class UI_Base<
         this._isOpened = false;
         this._owner.setup(this, false, opt);
 
+        DEV && log('[UI_Base] Close  2 >>', this._isOpened);
         const _out = this._closer ? await this._closer(...args) : this.root.active = false;
         this.emit('onAfterClose', ...args);
         this._onAfterClose?.();
