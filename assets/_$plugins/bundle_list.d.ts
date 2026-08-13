@@ -2,10 +2,13 @@ declare namespace pTS {
 	export namespace bundle {
 		export namespace list {
 			enum Enum_game_Prefab {
+				"daily_reward/prefabs/$_DailyReward_Popup_Config" = "daily_reward/prefabs/$_DailyReward_Popup_Config",
 				"daily_reward/prefabs/$_DailyReward_UI_Config" = "daily_reward/prefabs/$_DailyReward_UI_Config",
 				"daily_reward/prefabs/DailyReward_Btn" = "daily_reward/prefabs/DailyReward_Btn",
+				"daily_reward/prefabs/DailyReward_Item" = "daily_reward/prefabs/DailyReward_Item",
 				"daily_reward/prefabs/DailyReward_Popup" = "daily_reward/prefabs/DailyReward_Popup",
 				"daily_reward/prefabs/RewardItem_UI" = "daily_reward/prefabs/RewardItem_UI",
+				"item/prefabs/$_Item_Visualize_Config" = "item/prefabs/$_Item_Visualize_Config",
 				"message_notifier/prefabs/message" = "message_notifier/prefabs/message",
 				"profile/prefabs/Profile_Popup" = "profile/prefabs/Profile_Popup",
 				"$shared/area/prefabs/AreaItem_UI" = "$shared/area/prefabs/AreaItem_UI",
@@ -32,9 +35,25 @@ declare namespace pTS {
 				"home_screen/$main_page/prefabs/HomeScreen_Page_Home" = "home_screen/$main_page/prefabs/HomeScreen_Page_Home",
 				"home_screen/_$shared/prefabs/HomeScreen_NavBar" = "home_screen/_$shared/prefabs/HomeScreen_NavBar",
 				"home_screen/_$shared/prefabs/HomeScreen_Popup" = "home_screen/_$shared/prefabs/HomeScreen_Popup",
-				"item/prefabs/$_Item_Visualize_Config" = "item/prefabs/$_Item_Visualize_Config",
-				"daily_reward/prefabs/DailyReward_Item" = "daily_reward/prefabs/DailyReward_Item",
-				"daily_reward/prefabs/$_DailyReward_Popup_Config" = "daily_reward/prefabs/$_DailyReward_Popup_Config"
+				"shop/prefabs/HomeScreen_Page_Shop" = "shop/prefabs/HomeScreen_Page_Shop",
+				"shop/prefabs/Shop_Coin_Item" = "shop/prefabs/Shop_Coin_Item",
+				"shop/prefabs/Shop_Bundle_Item" = "shop/prefabs/Shop_Bundle_Item",
+				"shop/prefabs/Shop_Coin_Config" = "shop/prefabs/Shop_Coin_Config",
+				"$shared/ads/prefabs/Ads_UI" = "$shared/ads/prefabs/Ads_UI",
+				"game_screen/prefabs/GameScreen_Popup" = "game_screen/prefabs/GameScreen_Popup",
+				"game_play/characters/borrum/fbx/Borrum/Borrum" = "game_play/characters/borrum/fbx/Borrum/Borrum",
+				"game_play/characters/borrum/fbx/Idle_Left/Idle_Left" = "game_play/characters/borrum/fbx/Idle_Left/Idle_Left",
+				"game_play/characters/borrum/fbx/Map1_Long_Anim/Map1_Long_Anim" = "game_play/characters/borrum/fbx/Map1_Long_Anim/Map1_Long_Anim",
+				"game_play/characters/borrum/fbx/Map_30/Map_30" = "game_play/characters/borrum/fbx/Map_30/Map_30",
+				"game_play/characters/borrum/fbx/Map_5_Long_anim/Map_5_Long_anim" = "game_play/characters/borrum/fbx/Map_5_Long_anim/Map_5_Long_anim",
+				"game_play/characters/borrum/fbx/Push_All/Push_All" = "game_play/characters/borrum/fbx/Push_All/Push_All",
+				"game_play/characters/borrum/fbx/Map_7-16-19-22/Map_7-16-19-22" = "game_play/characters/borrum/fbx/Map_7-16-19-22/Map_7-16-19-22",
+				"game_play/characters/borrum/fbx/Map_13-21/Map_13-21" = "game_play/characters/borrum/fbx/Map_13-21/Map_13-21",
+				"game_play/characters/borrum/fbx/Map_28/Map_28" = "game_play/characters/borrum/fbx/Map_28/Map_28",
+				"game_play/characters/anna/fbx/Anim_LV11-17/Anim_LV11-17" = "game_play/characters/anna/fbx/Anim_LV11-17/Anim_LV11-17",
+				"game_play/characters/anna/fbx/Dar_Anna/Dar_Anna" = "game_play/characters/anna/fbx/Dar_Anna/Dar_Anna",
+				"game_play/characters/ella/fbx/Ella/Ella" = "game_play/characters/ella/fbx/Ella/Ella",
+				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22"
 			}
 			enum Enum_test_Prefab {
 				"fabs/_fab" = "fabs/_fab"
