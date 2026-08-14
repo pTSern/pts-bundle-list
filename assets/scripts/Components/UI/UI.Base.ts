@@ -1,5 +1,5 @@
 import { _decorator, Button, CCString, Component, log, Node } from "cc";
-import { pArray, pConst, pEngine } from "db://pts-core/scripts/utils";
+import { pArray, pConst, pEngine, pGlobal } from "db://pts-core/scripts/utils";
 import { Event_Driver } from "db://pts-core/scripts/Components/Event/Event.Driver";
 import { UI_IBase, UI_ICloseOpt, UI_IOpenOpt, UI_TParams } from "../../../interfaces/Components/UI/UI.IBase";
 import { UI_IController } from "db://pts-bundle-list/interfaces/Components/UI/UI.IController";
@@ -8,16 +8,23 @@ import { DEV } from "cc/env";
 
 const { ccclass, property } = _decorator;
 
+const _$events = ['onBeforeOpen', 'onAfterOpen', 'onBeforeClose', 'onAfterClose'] as const;
+
+type _$TParam<_TParams extends UI_TParams> = {
+    onBeforeOpen: _TParams['open']
+    onAfterOpen: _TParams['open']
+    onBeforeClose: _TParams['close']
+    onAfterClose: _TParams['close']
+}
+
 @ccclass(UI_IBase.CCClass)
 export abstract class UI_Base<
     _TId extends pFlex.TKey,
     _TParams extends UI_TParams = UI_TParams,
-> extends Event_Driver<{
-    onBeforeOpen: _TParams['open'],
-    onAfterOpen: _TParams['open'],
-    onBeforeClose: _TParams['close'],
-    onAfterClose: _TParams['close'] }
+> extends Event_Driver<
+    _$TParam<_TParams>
 > implements UI_IBase<_TId, _TParams> {
+    protected static _$bounces = _$events;
 
     protected abstract _tid: _TId
     abstract get tid(): _TId
@@ -75,7 +82,7 @@ export abstract class UI_Base<
 
     async open(opt: UI_IOpenOpt<_TId>, ...args: Parameters<_TParams["open"]>): Promise<ReturnType<_TParams["open"]>> {
         if(!this._owner || !this._owner.isValid) return;
-        DEV && log('[UI_Base] Open >>', this, " with opt ", opt, ' args ', ...args);
+        pGlobal.log('DEV', '[UI_Base] Open >>', this, " with opt ", opt, ' args ', ...args);
 
         this.emit('onBeforeOpen', ...args);
         this._onBeforeOpen?.();
