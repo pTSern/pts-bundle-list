@@ -313,13 +313,6 @@ export abstract class UI_Controller<
         _ui.link(this);
 
         const _papa = _ui.isPopup ? this.popup : this.screen;
-        if(!_ui.isPopup) {
-            const _others = _papa.getComponentsInChildren(UI_IBase.CCClass) as (Component & _TWho)[];
-
-            for(const _other of _others) {
-                _other?.close();
-            }
-        }
         _papa.addChild(_node);
 
         _loading && this.loading.show(false);
@@ -354,7 +347,9 @@ export abstract class UI_Controller<
             this._pending.set(_id, (this._pending.get(_id) ?? 1) - 1);
             const _promises: Promise<any>[] = [];
             for(const _ui of _uis) {
-                !_ui.isOpening && _promises.push(_ui.open(...params));
+                if(_ui && _ui.isValid) {
+                    !_ui.isOpening && _promises.push(_ui.open(...params));
+                }
                 console.log("[UI_Controller].{open} >> WARN: Max instance reached for UI", _id, " (max:", _data.max, ", current:", _uis.length, ", pending:", _pending, ")", _ui);
             }
             await Promise.all(_promises);
@@ -378,12 +373,13 @@ export abstract class UI_Controller<
 
         this.loading.show(true);
 
-        await Promise.all(_uis.map(_ => _.close(...params)));
+        await Promise.all(_uis.map(_ => _ && _.isValid && _.close(...params)));
         this.loading.show(false);
     }
 
     get(id: _T_UI_Id) {
-        return (this._pool.get(id) ?? []) as UI_IBase<_T_UI_Id, any>[];
+        const _uis = (this._pool.get(id) ?? []) as UI_IBase<_T_UI_Id, any>[];
+        return _uis.filter(_ui => _ui && _ui.isValid);
     }
 
     preload(id: pFlex.TArray<_T_UI_Id>, ...ids: _T_UI_Id[]) {
@@ -405,13 +401,24 @@ export abstract class UI_Controller<
     protected _onOpenUI(target: UI_IBase<_T_UI_Id, any>, opt: UI_IOpenOpt<_T_UI_Id>) {
         if(!target || !target.isValid) return;
 
+        if(!target.isPopup) {
+            if(this._scene && this._scene !== target.tid) {
+                target.setBackUp([this._scene], true);
+            }
+            this._scene = target.tid;
+
+            if(this.screen) {
+                const _others = this.screen.getComponentsInChildren(UI_IBase.CCClass) as UI_IBase<_T_UI_Id, any>[];
+                for(const _other of _others) {
+                    if(_other && _other.isValid && _other !== target && !_other.isPopup && _other.isOpening) {
+                        _other.close({ isNotOpenBackUp: true });
+                    }
+                }
+            }
+        }
+
         if(opt) {
             const { arrBackUpPermantly, isOnTop, layer, arrBackUpOnce } = opt;
-
-            if(!target.isPopup) {
-                this._scene && target.setBackUp([this._scene], true);
-                this._scene = target.tid;
-            }
 
             if(layer) {
                 target.root.layer = layer;
@@ -425,11 +432,20 @@ export abstract class UI_Controller<
             }
 
             arrBackUpPermantly && target.setBackUp(arrBackUpPermantly, false);
-            arrBackUpOnce && target.setBackUp(arrBackUpOnce, true)
+            arrBackUpOnce && target.setBackUp(arrBackUpOnce, true);
         }
 
         if(!!this.dark) {
-            target.isPopup && (this.dark.active = true);
+            let _is = false;
+            this._pool.forEach(_uis => {
+                for(const _ui of _uis) {
+                    if(_ui && _ui.isValid && _ui.isPopup && _ui.isOpening) {
+                        _is = true;
+                        return;
+                    }
+                }
+            });
+            this.dark.active = _is;
         }
     }
 
@@ -440,13 +456,22 @@ export abstract class UI_Controller<
 
         console.log("[UI_Controller] _onCloseUI >>", target.tid, " isNotOpenBackUp: ", isNotOpenBackUp, " isForceDestroy: ", isForceDestroy, opt);
         !isNotOpenBackUp && target.actOpenBackUp();
-        isForceDestroy && target.actDestroyCompletly();
+
+        const _shouldDestroy = isForceDestroy || target.shouldDestroyOnClose;
+        if(_shouldDestroy) {
+            const _uis = this._pool.get(target.tid);
+            if(_uis) {
+                const _idx = _uis.indexOf(target);
+                if(_idx !== -1) _uis.splice(_idx, 1);
+            }
+            target.actDestroyCompletly();
+        }
 
         if(!!this.dark) {
             let _is = false;
             this._pool.forEach(_uis => {
                 for(const _ui of _uis) {
-                    if(_ui.isPopup && _ui.isOpening) {
+                    if(_ui && _ui.isValid && _ui.isPopup && _ui.isOpening) {
                         _is = true;
                         return;
                     }
