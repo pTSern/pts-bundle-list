@@ -53,11 +53,20 @@ declare namespace pTS {
 				"game_play/characters/borrum/fbx/Map_5_Long_anim/Map_5_Long_anim" = "game_play/characters/borrum/fbx/Map_5_Long_anim/Map_5_Long_anim",
 				"game_play/characters/borrum/fbx/Map_7-16-19-22/Map_7-16-19-22" = "game_play/characters/borrum/fbx/Map_7-16-19-22/Map_7-16-19-22",
 				"game_play/characters/borrum/fbx/Push_All/Push_All" = "game_play/characters/borrum/fbx/Push_All/Push_All",
+				"game_play/characters/borrum/prefabs/Borrum" = "game_play/characters/borrum/prefabs/Borrum",
 				"game_play/characters/ella/fbx/Ella/Ella" = "game_play/characters/ella/fbx/Ella/Ella",
-				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22"
+				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22",
+				"game_play/prefabs/lvl/level_1" = "game_play/prefabs/lvl/level_1",
+				"game_play/prefabs/elems/GamePlay_Match_Block" = "game_play/prefabs/elems/GamePlay_Match_Block",
+				"game_play/prefabs/elems/GamePlay_Match_Config" = "game_play/prefabs/elems/GamePlay_Match_Config",
+				"game_play/prefabs/elems/CELL" = "game_play/prefabs/elems/CELL",
+				"game_play/prefabs/elems/GamePlay_Elem_Drill" = "game_play/prefabs/elems/GamePlay_Elem_Drill"
 			}
 			enum Enum_test_Prefab {
 				"fabs/_fab" = "fabs/_fab"
+			}
+			enum Enum_test_2_Prefab {
+				"default_radio_button_off" = "default_radio_button_off"
 			}
 			enum Enum_wonder_match_Prefab {
 			}
@@ -69,17 +78,21 @@ declare namespace pTS {
 				test: {
 					Prefab: typeof Enum_test_Prefab;
 				}
+				test_2: {
+					Prefab: typeof Enum_test_2_Prefab;
+				}
 				wonder_match: {
 					Prefab: typeof Enum_wonder_match_Prefab;
 				}
 			}
 
 			export namespace bundle {
-				export const list: ["game", "test", "wonder_match"];
+				export const list: ["game", "test", "test_2", "wonder_match"];
 				export type TType = typeof list[number];
 				export enum Enum {
 					game = "game",
 					test = "test",
+					test_2 = "test_2",
 					wonder_match = "wonder_match"
 				}
 				export const CCEnums: { name: TType; value: TType }[];
