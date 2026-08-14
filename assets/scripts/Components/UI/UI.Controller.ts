@@ -2,7 +2,7 @@ import { _decorator, Asset, CCClass, CCInteger, Component, Enum, instantiate, js
 import { Event_Driver } from "db://pts-core/scripts/Components/Event/Event.Driver";
 import { CC_EnumList, CC_IEnumable, CC_IEnumList } from 'db://pts-core/scripts/interfaces/cc/CC.IEnumable'
 import { EDITOR } from "cc/env";
-import { pConst } from "db://pts-core/scripts/utils";
+import { pConst, pEngine } from "db://pts-core/scripts/utils";
 import { Bundle_Manager } from "../../bundle/Bundle.Manager";
 import { UI_IBase, UI_ICloseOpt, UI_IOpenOpt } from "../../../interfaces/Components/UI/UI.IBase";
 import { UI_IController } from "db://pts-bundle-list/interfaces/Components/UI/UI.IController";
@@ -193,11 +193,30 @@ class _Bridge_UIToAsset<
 
 const _$pool = js.createMap(true);
 
+type _TPram = {
+    open: pFlex.TFunc<[pFlex.TKey], void>
+    close: pFlex.TFunc<[pFlex.TKey], void>
+}
+
+@ccclass("UI_Controller._Helper")
+class _Helper<_T_UI_Id extends pFlex.TKey> extends Event_Driver.Helper<keyof _TPram> {
+    @property({ type: Enum({}), displayOrder: 0 })
+    id: _T_UI_Id = "" as _T_UI_Id
+
+    emit(key: _T_UI_Id, ...args: any[]): any[] {
+        if(key != this.id) return;
+        return pEngine.Json.event.invoke(this.events, this.id, ...args);
+    }
+
+}
+
 @ccclass("UI_Controller")
 export abstract class UI_Controller<
     _T_UI_Id extends pFlex.TKey,
     _TAll extends Record<string, Record<pFlex.TKey, any>>
-> extends Event_Driver<{}> implements UI_IController<_T_UI_Id, _TAll> {
+> extends Event_Driver<_TPram> implements UI_IController<_T_UI_Id, _TAll> {
+    protected static _$bounces = ['open', 'close'] as const;
+    protected static _$class = _Helper;
 
     static get(id: string) {
         return _$pool[id] as UI_Controller<any, any> | undefined;
@@ -243,6 +262,7 @@ export abstract class UI_Controller<
     get list() { return CC_EnumList(this._list) }
 
     protected __preload(): void {
+        super.__preload();
         this._actSetupLoading();
         this.dark && ( this.dark.active = false )
         UI_Controller.register(this);
@@ -269,7 +289,9 @@ export abstract class UI_Controller<
 
     onFocusInEditor(): void {
         if(!EDITOR) return;
+        super.onFocusInEditor();
         CCClass.Attr.setClassAttr(this, 'landing', 'enumList', this.list || []);
+        this.helpers.forEach(_ => CCClass.Attr.setClassAttr(_, 'id', 'enumList', this.list || []));
         this.bridge.focus(this);
     }
 
@@ -353,6 +375,7 @@ export abstract class UI_Controller<
                 console.log("[UI_Controller].{open} >> WARN: Max instance reached for UI", _id, " (max:", _data.max, ", current:", _uis.length, ", pending:", _pending, ")", _ui);
             }
             await Promise.all(_promises);
+            this.emit('open', _id);
             return _uis;
         }
         //this._pending.set(_id, _pending + 1);
@@ -364,6 +387,7 @@ export abstract class UI_Controller<
             this._pending.set(_id, (this._pending.get(_id) ?? 1) - 1);
         }
 
+        this.emit('open', _id);
         return _uis;
     }
 
@@ -375,6 +399,7 @@ export abstract class UI_Controller<
 
         await Promise.all(_uis.map(_ => _ && _.isValid && _.close(...params)));
         this.loading.show(false);
+        this.emit('close', id);
     }
 
     get(id: _T_UI_Id) {
@@ -408,7 +433,7 @@ export abstract class UI_Controller<
             this._scene = target.tid;
 
             if(this.screen) {
-                const _others = this.screen.getComponentsInChildren(UI_IBase.CCClass) as UI_IBase<_T_UI_Id, any>[];
+                const _others = this.screen.getComponentsInChildren(UI_IBase.CCClass) as (Component & UI_IBase<_T_UI_Id, any>)[];
                 for(const _other of _others) {
                     if(_other && _other.isValid && _other !== target && !_other.isPopup && _other.isOpening) {
                         _other.close({ isNotOpenBackUp: true });
