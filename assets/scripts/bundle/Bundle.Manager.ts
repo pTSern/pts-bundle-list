@@ -1,5 +1,12 @@
 
 import { _decorator, AssetManager, assetManager, Asset, js } from "cc";
+import { pConst } from "db://pts-core/scripts/utils";
+
+interface _$IPromise {
+    rs: pFlex.TFunc<[AssetManager.Bundle], void>
+    rj: pFlex.TFunc<[Error], void>
+    pm: Promise<AssetManager.Bundle>
+}
 
 export class Bundle_Manager<
     _TAll extends Record<string, Record<pFlex.TKey, any>>,
@@ -15,7 +22,7 @@ export class Bundle_Manager<
             _ret = Bundle_Manager._$pool[id];
 
             if(!!_ret) {
-                if(_ret._isSealed) return _ret;
+                if(_ret._sealed) return _ret;
 
                 _ret._init(all, preload);
                 return _ret;
@@ -29,7 +36,7 @@ export class Bundle_Manager<
     }
 
     protected _init(all: _TAll, preload: (keyof _TAll)[]): void {
-        if(this._isSealed) return;
+        if(this._sealed) return;
 
         this._all = all;
         preload.forEach(_ => this.load(_));
@@ -37,19 +44,38 @@ export class Bundle_Manager<
 
     protected constructor() {  }
 
-    protected _bundle: Map<keyof _TAll, AssetManager.Bundle> = new Map();
     protected _all: _TAll
     get all() { return this._all }
 
-    protected get _isSealed() { return !!this._all }
+    protected get _sealed() { return !!this._all }
+    protected _$promises: Record<pFlex.TKey, _$IPromise> = js.createMap(true);
 
-    get isCompleted() {
-        if(!this._isSealed) return false
-        return Object.keys(this._all).length === this._bundle.size
+    get completed() {
+        if(!this._sealed) return false;
+        return Object.keys(this._all).length === assetManager.bundles.count;
+    }
+
+    wait<_TKey extends keyof _TAll>(bundle: _TKey) {
+        const _bundle = this.at(bundle);
+        if(!!_bundle) {
+            this._$resolve(bundle, _bundle);
+            return Promise.resolve(_bundle);
+        }
+
+        if(this._$promises[bundle]) {
+            return this._$promises[bundle].pm;
+        }
+
+        const pm = new Promise<AssetManager.Bundle>( (rs, rj) => 
+            this._$promises[bundle] = { rs, rj, pm: null }
+        )
+
+        this._$promises[bundle].pm = pm;
+        return pm;
     }
 
     at(key: keyof _TAll) {
-        return this._bundle.get(key)
+        return assetManager.bundles.get(String(key))
     }
 
     glazy<_TAsset>(bundle: string, type: string, asset: string): Promise<_TAsset> {
@@ -63,8 +89,9 @@ export class Bundle_Manager<
     >(bundle: _TKey, type: _TType, asset: keyof _TAll[_TKey][_TType]) {
         if(!this._all) return;
         type;
+
         return new Promise<_TAsset>( async (_rs, _rj) => {
-            let _bundle = this._bundle.get(bundle);
+            let _bundle = this.at(bundle);
             if(!_bundle) {
                 _bundle = await this.load(bundle);
                 if(!_bundle) {
@@ -73,9 +100,9 @@ export class Bundle_Manager<
                 }
             }
 
-            _bundle.load<_TAsset>(asset.toString(), (_err, _asset) => {
+            _bundle.load<_TAsset>(asset.toString(), (_err, _asset) => 
                 _err ? _rj(_err) : _rs(_asset)
-            })
+            )
         } )
     }
 
@@ -86,7 +113,7 @@ export class Bundle_Manager<
         if(!this._all) return;
         type;
         return new Promise<AssetManager.RequestItem[]>( async (_rs, _rj) => {
-            let _bundle = this._bundle.get(bundle);
+            let _bundle = this.at(bundle);
 
             if(!_bundle) {
                 _bundle = await this.load(bundle);
@@ -96,10 +123,30 @@ export class Bundle_Manager<
                 }
             }
 
-            _bundle.preload(assets.map(String), (_err, _asset) => {
+            _bundle.preload(assets.map(String), (_err, _asset) => 
                 _err ? _rj(_err) : _rs(_asset)
-            })
+            )
         } )
+    }
+
+    protected _$resolve(who: pFlex.TKey, asset: AssetManager.Bundle) {
+        const _promise = this._$promises[who];
+
+        if(!!_promise) {
+            _promise.rs(asset);
+            _promise.rs = _promise.rj = pConst.VOID_FUNC;
+            _promise.pm = Promise.resolve(asset);
+        }
+    }
+
+    protected _$reject(who: pFlex.TKey, error: Error) {
+        const _promise = this._$promises[who];
+
+        if(!!_promise) {
+            _promise.rj(error);
+            _promise.rs = _promise.rj = pConst.VOID_FUNC;
+            _promise.pm = Promise.reject(error);
+        }
     }
 
     load<_TKey extends keyof _TAll>(bundle: _TKey) {
@@ -108,19 +155,18 @@ export class Bundle_Manager<
             const _path = bundle.toString();
 
             assetManager.loadBundle(_path, async (_error, _bundle) => {
-                if(_error) {
-                    console.error("[ Assets_BundleManager ].{ load } >> ERROR: ", _path, _error);
-                    _rj(_error)
+                if(!!_error) {
+                    console.error(`[ Assets_BundleManager ].{ load } >> ERROR: Bundle ${_path} Does not existed`)
+
+                    this._$reject(bundle, _error);
+                    _rj(_error);
                     return;
                 }
 
-                this._bundle.set(_path, _bundle);
-                console.log("[ Assets_BundleManager ].{ load } >> Complete: ", _path, _bundle);
+                this._$resolve(bundle, _bundle);
                 _rs(_bundle);
             })
         })
     }
-
-
 }
 
