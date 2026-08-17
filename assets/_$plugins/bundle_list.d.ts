@@ -10,7 +10,6 @@ declare namespace pTS {
 				"daily_reward/prefabs/RewardItem_UI" = "daily_reward/prefabs/RewardItem_UI",
 				"game_screen/prefabs/GameScreen_Popup" = "game_screen/prefabs/GameScreen_Popup",
 				"item/prefabs/$_Item_Visualize_Config" = "item/prefabs/$_Item_Visualize_Config",
-				"message_notifier/prefabs/message" = "message_notifier/prefabs/message",
 				"profile/prefabs/Profile_Popup" = "profile/prefabs/Profile_Popup",
 				"shop/prefabs/HomeScreen_Page_Shop" = "shop/prefabs/HomeScreen_Page_Shop",
 				"shop/prefabs/Shop_Bundle_Item" = "shop/prefabs/Shop_Bundle_Item",
@@ -38,6 +37,11 @@ declare namespace pTS {
 				"decorator/level_1/prefab/Level_UI_1" = "decorator/level_1/prefab/Level_UI_1",
 				"decorator/level_2/prefab/$_config_level_2" = "decorator/level_2/prefab/$_config_level_2",
 				"decorator/level_2/prefab/Level_UI_2" = "decorator/level_2/prefab/Level_UI_2",
+				"game_play/prefabs/elems/CELL" = "game_play/prefabs/elems/CELL",
+				"game_play/prefabs/elems/GamePlay_Elem_Drill" = "game_play/prefabs/elems/GamePlay_Elem_Drill",
+				"game_play/prefabs/elems/GamePlay_Match_Block" = "game_play/prefabs/elems/GamePlay_Match_Block",
+				"game_play/prefabs/elems/GamePlay_Match_Config" = "game_play/prefabs/elems/GamePlay_Match_Config",
+				"game_play/prefabs/lvl/level_1" = "game_play/prefabs/lvl/level_1",
 				"home_screen/$areas_page/prefabs/HomeScreen_Page_Areas" = "home_screen/$areas_page/prefabs/HomeScreen_Page_Areas",
 				"home_screen/$main_page/prefabs/HomeScreen_Page_Home" = "home_screen/$main_page/prefabs/HomeScreen_Page_Home",
 				"home_screen/_$shared/prefabs/HomeScreen_NavBar" = "home_screen/_$shared/prefabs/HomeScreen_NavBar",
@@ -55,12 +59,7 @@ declare namespace pTS {
 				"game_play/characters/borrum/fbx/Push_All/Push_All" = "game_play/characters/borrum/fbx/Push_All/Push_All",
 				"game_play/characters/borrum/prefabs/Borrum" = "game_play/characters/borrum/prefabs/Borrum",
 				"game_play/characters/ella/fbx/Ella/Ella" = "game_play/characters/ella/fbx/Ella/Ella",
-				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22",
-				"game_play/prefabs/lvl/level_1" = "game_play/prefabs/lvl/level_1",
-				"game_play/prefabs/elems/GamePlay_Match_Block" = "game_play/prefabs/elems/GamePlay_Match_Block",
-				"game_play/prefabs/elems/GamePlay_Match_Config" = "game_play/prefabs/elems/GamePlay_Match_Config",
-				"game_play/prefabs/elems/CELL" = "game_play/prefabs/elems/CELL",
-				"game_play/prefabs/elems/GamePlay_Elem_Drill" = "game_play/prefabs/elems/GamePlay_Elem_Drill"
+				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22"
 			}
 			enum Enum_test_Prefab {
 				"fabs/_fab" = "fabs/_fab"
