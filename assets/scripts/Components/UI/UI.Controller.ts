@@ -1,7 +1,6 @@
 import { _decorator, Asset, CCClass, CCInteger, Component, Enum, instantiate, js, Node, Prefab } from "cc";
 import { Event_Driver } from "db://pts-core/scripts/Components/Event/Event.Driver";
 import { CC_EnumList, CC_IEnumable, CC_IEnumList } from 'db://pts-core/scripts/interfaces/cc/CC.IEnumable'
-import { EDITOR } from "cc/env";
 import { pConst, pEngine } from "db://pts-core/scripts/utils";
 import { Bundle_Manager } from "../../bundle/Bundle.Manager";
 import { UI_IBase, UI_ICloseOpt, UI_IOpenOpt } from "../../../interfaces/Components/UI/UI.IBase";
@@ -9,6 +8,7 @@ import { UI_IController } from "db://pts-bundle-list/interfaces/Components/UI/UI
 import { Helper_UI_Loader } from "db://pts-core/scripts/helper/UI/Helper.UI.Loader";
 import { editor_property } from "db://pts-core/scripts/utils/pClass";
 import { Helper_IdSelector } from "db://pts-core/scripts/helper/Helper.IdSelector";
+import { Event_Flexer } from "db://pts-core/scripts/Components/Event/Event.Flexer";
 
 const { ccclass, property } = _decorator;
 
@@ -93,7 +93,6 @@ class _Bridge_Asseter {
             path: this._asset,
         }
     }
-
 }
 
 type _$IOpenOpt<_T_UI_Id extends pFlex.TKey> = {
@@ -210,6 +209,35 @@ class _Helper<_T_UI_Id extends pFlex.TKey> extends Event_Driver.Helper<keyof _TP
 
 }
 
+@ccclass("UI_Controller._BundleLoader")
+class _BundleLoader {
+    @property({})
+    protected _bundle: string = ""
+
+    @property({ type: Enum({}) })
+    get bundle() { return this._bundle }
+    set bundle(x) { this._bundle = x }
+
+    @property({ type: Event_Flexer })
+    onLoaded: Event_Flexer = new Event_Flexer();
+
+    protected _manager: Bundle_Manager<any> = null;
+
+    focus(ref: Bundle_Manager<any>) {
+        this._manager = ref;
+
+        const _keys = Object.keys(this._manager.all).map(_ => ({ name: _, value: _ }));
+
+        CCClass.Attr.setClassAttr(this, 'bundle', 'enumList', _keys)
+    }
+
+    append(ref: Bundle_Manager<any>) {
+        if(!ref) return;
+        this._manager = ref;
+        this._manager.wait(this._bundle).then(_ => this.onLoaded.emit(_));
+    }
+}
+
 @ccclass("UI_Controller")
 export abstract class UI_Controller<
     _T_UI_Id extends pFlex.TKey,
@@ -245,6 +273,9 @@ export abstract class UI_Controller<
     @property({ group: pConst.GROUPS.OPTION, type: Enum({}) })
     landing: _T_UI_Id = '' as _T_UI_Id;
 
+    @property({ type: _BundleLoader, group: pConst.GROUPS.EVENT })
+    onBundlesLoaded: _BundleLoader[] = []
+
     protected abstract _bundle: Bundle_Manager<_TAll>;
     get bundle() { return this._bundle }
 
@@ -264,8 +295,20 @@ export abstract class UI_Controller<
     protected __preload(): void {
         super.__preload();
         this._actSetupLoading();
+
         this.dark && ( this.dark.active = false )
         UI_Controller.register(this);
+
+        this._actApplyBundleWaiter();
+    }
+
+    protected _actApplyBundleWaiter() {
+        if(!this.bundle) return;
+        for(const _waiter of this.onBundlesLoaded) {
+            if(!_waiter) continue;
+
+            _waiter.append(this.bundle);
+        }
     }
 
     protected _actSetupLoading() {
@@ -273,10 +316,7 @@ export abstract class UI_Controller<
     }
 
     protected onLoad(): void {
-        this.onFocusInEditor();
-
         if(!this.bundle) {
-
             return;
         }
 
@@ -288,11 +328,12 @@ export abstract class UI_Controller<
     }
 
     onFocusInEditor(): void {
-        if(!EDITOR) return;
         super.onFocusInEditor();
+
         CCClass.Attr.setClassAttr(this, 'landing', 'enumList', this.list || []);
         this.helpers.forEach(_ => CCClass.Attr.setClassAttr(_, 'id', 'enumList', this.list || []));
         this.bridge.focus(this);
+        this.onBundlesLoaded.forEach(_ => _.focus(this.bundle));
     }
 
     resetInEditor(): void {
@@ -318,6 +359,7 @@ export abstract class UI_Controller<
             _prm = this.bundle.get(_data.bundle, _data.type, _data.path);
             this._loader.set(_id, _prm);
         }
+
         const _prefab = await _prm;
         if(!(_prefab instanceof Prefab)) {
             console.warn('[UI_Controller].{open} >> WARN: Invalid Typeof Asset', "\nAsset: ", _prefab);
