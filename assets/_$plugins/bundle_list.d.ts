@@ -9,7 +9,6 @@ declare namespace pTS {
 				"daily_reward/prefabs/DailyReward_Popup" = "daily_reward/prefabs/DailyReward_Popup",
 				"daily_reward/prefabs/RewardItem_UI" = "daily_reward/prefabs/RewardItem_UI",
 				"game_screen/prefabs/GameScreen_Popup" = "game_screen/prefabs/GameScreen_Popup",
-				"item/prefabs/$_Item_Visualize_Config" = "item/prefabs/$_Item_Visualize_Config",
 				"profile/prefabs/Profile_Popup" = "profile/prefabs/Profile_Popup",
 				"shop/prefabs/HomeScreen_Page_Shop" = "shop/prefabs/HomeScreen_Page_Shop",
 				"shop/prefabs/Shop_Bundle_Item" = "shop/prefabs/Shop_Bundle_Item",
@@ -61,6 +60,8 @@ declare namespace pTS {
 				"game_play/characters/ella/fbx/Ella/Ella" = "game_play/characters/ella/fbx/Ella/Ella",
 				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22"
 			}
+			enum Enum_lang_Prefab {
+			}
 			enum Enum_test_Prefab {
 				"fabs/_fab" = "fabs/_fab"
 			}
@@ -69,12 +70,13 @@ declare namespace pTS {
 			}
 			enum Enum_wonder_match_Prefab {
 			}
-			enum Enum_lang_Prefab {
-			}
 
 			export type TContainer = {
 				game: {
 					Prefab: typeof Enum_game_Prefab;
+				}
+				lang: {
+					Prefab: typeof Enum_lang_Prefab;
 				}
 				test: {
 					Prefab: typeof Enum_test_Prefab;
@@ -85,20 +87,17 @@ declare namespace pTS {
 				wonder_match: {
 					Prefab: typeof Enum_wonder_match_Prefab;
 				}
-				lang: {
-					Prefab: typeof Enum_lang_Prefab;
-				}
 			}
 
 			export namespace bundle {
-				export const list: ["game", "test", "test_2", "wonder_match", "lang"];
+				export const list: ["game", "lang", "test", "test_2", "wonder_match"];
 				export type TType = typeof list[number];
 				export enum Enum {
 					game = "game",
+					lang = "lang",
 					test = "test",
 					test_2 = "test_2",
-					wonder_match = "wonder_match",
-					lang = "lang"
+					wonder_match = "wonder_match"
 				}
 				export const CCEnums: { name: TType; value: TType }[];
 			}
