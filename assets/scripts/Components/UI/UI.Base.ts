@@ -85,14 +85,14 @@ export abstract class UI_Base<
         pGlobal.log('DEV', '[UI_Base] Open >>', this, " with opt ", opt, ' args ', ...args);
 
         this.emit('onBeforeOpen', ...args);
-        this._onBeforeOpen?.();
+        this._onBeforeOpen?.(...args);
 
         this._isOpened = true;
         this._owner.setup(this, true, opt);
 
-        const _out = this._opener ? await this._opener(...args) : this.root.active = true;
+        const _out = this._opener ? await this._opener(...args) : (this.root.active = true, void 0);
         this.emit('onAfterOpen', ...args);
-        this._onAfterOpen?.();
+        this._onAfterOpen?.(_out, ...args);
 
         return _out as ReturnType<_TParams["open"]>;
     }
@@ -111,15 +111,15 @@ export abstract class UI_Base<
         DEV && log('[UI_Base] Close >>', this, " with opt ", opt, ' args ', ...args);
 
         this.emit('onBeforeClose', ...args);
-        this._onBeforeClose?.();
+        this._onBeforeClose?.(...args);
 
         this._isOpened = false;
         this._owner.setup(this, false, opt);
 
         DEV && log('[UI_Base] Close  2 >>', this._isOpened);
-        const _out = this._closer ? await this._closer(...args) : this.root.active = false;
+        const _out = this._closer ? await this._closer(...args) : (this.root.active = false, void 0);
         this.emit('onAfterClose', ...args);
-        this._onAfterClose?.();
+        this._onAfterClose?.(_out, ...args);
 
         return _out as ReturnType<_TParams["close"]>
     }
@@ -143,10 +143,10 @@ export abstract class UI_Base<
     protected _opener?(...args: Parameters<_TParams['open']>): Promise<ReturnType<_TParams['open']>>
     protected _closer?(...args: Parameters<_TParams['close']>): Promise<ReturnType<_TParams['close']>>
 
-    protected _onBeforeOpen?(): void
-    protected _onAfterOpen?(): void
+    protected _onBeforeOpen?(...args: Parameters<_TParams['open']>): void
+    protected _onAfterOpen?(_out: ReturnType<_TParams['open']>, ...args: Parameters<_TParams['open']>): void
 
-    protected _onBeforeClose?(): void
-    protected _onAfterClose?(): void
+    protected _onBeforeClose?(...args: Parameters<_TParams['close']>): void
+    protected _onAfterClose?(_out: ReturnType<_TParams['close']>, ...args: Parameters<_TParams['close']>): void
 }
 
