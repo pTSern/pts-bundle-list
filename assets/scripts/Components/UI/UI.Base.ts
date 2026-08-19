@@ -116,7 +116,6 @@ export abstract class UI_Base<
         this._isOpened = false;
         this._owner.setup(this, false, opt);
 
-        DEV && log('[UI_Base] Close  2 >>', this._isOpened);
         const _out = this._closer ? await this._closer(...args) : (this.root.active = false, void 0);
         this.emit('onAfterClose', ...args);
         this._onAfterClose?.(_out, ...args);

@@ -99,7 +99,7 @@ class _Bridge_Asseter {
 type _$IOpenOpt<_T_UI_Id extends pFlex.TKey> = {
     id: _T_UI_Id;
     loading: boolean
-} | _T_UI_Id
+} | _T_UI_Id;
 
 @ccclass("_Bridge_Converter")
 class _Bridge_Converter<
