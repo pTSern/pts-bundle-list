@@ -1,7 +1,7 @@
 import { _decorator, Asset, CCClass, CCInteger, Component, Enum, instantiate, js, Node, Prefab } from "cc";
 import { Event_Driver } from "db://pts-core/scripts/Components/Event/Event.Driver";
 import { CC_EnumList, CC_IEnumable, CC_IEnumList } from 'db://pts-core/scripts/interfaces/cc/CC.IEnumable'
-import { pConst, pEngine } from "db://pts-core/scripts/utils";
+import { pConst } from "db://pts-core/scripts/utils";
 import { Bundle_Manager } from "../../bundle/Bundle.Manager";
 import { UI_IBase, UI_ICloseOpt, UI_IOpenOpt } from "../../../interfaces/Components/UI/UI.IBase";
 import { UI_IController } from "db://pts-bundle-list/interfaces/Components/UI/UI.IController";
@@ -9,6 +9,7 @@ import { Helper_UI_Loader } from "db://pts-core/scripts/helper/UI/Helper.UI.Load
 import { editor_property } from "db://pts-core/scripts/utils/pClass";
 import { Helper_IdSelector } from "db://pts-core/scripts/helper/Helper.IdSelector";
 import { Event_Flexer } from "db://pts-core/scripts/Components/Event/Event.Flexer";
+import { DEV } from "cc/env";
 
 const { ccclass, property } = _decorator;
 
@@ -204,7 +205,7 @@ class _Helper<_T_UI_Id extends pFlex.TKey> extends Event_Driver.Helper<keyof _TP
 
     emit(key: _T_UI_Id, ...args: any[]): any[] {
         if(key != this.id) return;
-        return pEngine.Json.event.invoke(this.events, this.id, ...args);
+        return this.flex.emit(this.id, ...args);
     }
 
 }
@@ -373,6 +374,11 @@ export abstract class UI_Controller<
             console.warn('[UI_Controller].{open} >> WARN: Asset does not contain UI_IBase', "\nComponent: ", _ui);
             return null;
         }
+
+        _node.once(Node.EventType.NODE_DESTROYED, (_: Node) => {
+            this._loader.delete(_id);
+            this._pool.delete(_id);
+        })
 
         _ui.link(this);
 
@@ -557,3 +563,5 @@ export namespace UI_Controller {
     export const Bridge = _Bridge_Asseter;
     export type Bridge = _Bridge_Asseter;
 }
+
+DEV && (globalThis['UI_Controller'] = UI_Controller, UI_Controller['_$pool'] = _$pool);
