@@ -41,6 +41,14 @@ declare namespace pTS {
 				"game_play/prefabs/elems/GamePlay_Match_Block" = "game_play/prefabs/elems/GamePlay_Match_Block",
 				"game_play/prefabs/elems/GamePlay_Match_Config" = "game_play/prefabs/elems/GamePlay_Match_Config",
 				"game_play/prefabs/lvl/level_1" = "game_play/prefabs/lvl/level_1",
+				"game_screen/$lucky_spin/prefabs/$_config" = "game_screen/$lucky_spin/prefabs/$_config",
+				"game_screen/$lucky_spin/prefabs/LuckyItem_x2" = "game_screen/$lucky_spin/prefabs/LuckyItem_x2",
+				"game_screen/$lucky_spin/prefabs/LuckyItem_x3" = "game_screen/$lucky_spin/prefabs/LuckyItem_x3",
+				"game_screen/$lucky_spin/prefabs/LuckyItem_x5" = "game_screen/$lucky_spin/prefabs/LuckyItem_x5",
+				"game_screen/$lucky_spin/prefabs/LuckySpin" = "game_screen/$lucky_spin/prefabs/LuckySpin",
+				"game_screen/$result_popup/prefabs/GameResult_Popup" = "game_screen/$result_popup/prefabs/GameResult_Popup",
+				"game_screen/$reward_previewer/prefabs/RewardPreviewer" = "game_screen/$reward_previewer/prefabs/RewardPreviewer",
+				"game_screen/$reward_previewer/prefabs/RewardPreviewer_Item" = "game_screen/$reward_previewer/prefabs/RewardPreviewer_Item",
 				"home_screen/$areas_page/prefabs/HomeScreen_Page_Areas" = "home_screen/$areas_page/prefabs/HomeScreen_Page_Areas",
 				"home_screen/$main_page/prefabs/HomeScreen_Page_Home" = "home_screen/$main_page/prefabs/HomeScreen_Page_Home",
 				"home_screen/_$shared/prefabs/HomeScreen_NavBar" = "home_screen/_$shared/prefabs/HomeScreen_NavBar",
@@ -59,14 +67,7 @@ declare namespace pTS {
 				"game_play/characters/borrum/prefabs/Borrum" = "game_play/characters/borrum/prefabs/Borrum",
 				"game_play/characters/ella/fbx/Ella/Ella" = "game_play/characters/ella/fbx/Ella/Ella",
 				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22",
-				"game_screen/$lucky_spin/prefabs/LuckySpin" = "game_screen/$lucky_spin/prefabs/LuckySpin",
-				"game_screen/$result_popup/prefabs/GameResult_Popup" = "game_screen/$result_popup/prefabs/GameResult_Popup",
-				"game_screen/$lucky_spin/prefabs/$_config" = "game_screen/$lucky_spin/prefabs/$_config",
-				"game_screen/$lucky_spin/prefabs/LuckyItem_x2" = "game_screen/$lucky_spin/prefabs/LuckyItem_x2",
-				"game_screen/$lucky_spin/prefabs/LuckyItem_x3" = "game_screen/$lucky_spin/prefabs/LuckyItem_x3",
-				"game_screen/$lucky_spin/prefabs/LuckyItem_x5" = "game_screen/$lucky_spin/prefabs/LuckyItem_x5",
-				"game_screen/$reward_previewer/prefabs/RewardPreviewer" = "game_screen/$reward_previewer/prefabs/RewardPreviewer",
-				"game_screen/$reward_previewer/prefabs/RewardPreviewer_Item" = "game_screen/$reward_previewer/prefabs/RewardPreviewer_Item"
+				"$shared/heart/prefabs/$_Heart_Config" = "$shared/heart/prefabs/$_Heart_Config"
 			}
 			enum Enum_lang_Prefab {
 			}
