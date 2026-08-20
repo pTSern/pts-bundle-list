@@ -24,7 +24,6 @@ declare namespace pTS {
 				"$shared/coin/prefabs/Coin_UI" = "$shared/coin/prefabs/Coin_UI",
 				"$shared/diamond_hunt_process/prefabs/$_data" = "$shared/diamond_hunt_process/prefabs/$_data",
 				"$shared/diamond_hunt_process/prefabs/DiamondHuntProcess_UI" = "$shared/diamond_hunt_process/prefabs/DiamondHuntProcess_UI",
-				"$shared/heart/prefabs/Heart_UI" = "$shared/heart/prefabs/Heart_UI",
 				"$shared/settings/prefabs/Setting_Popup" = "$shared/settings/prefabs/Setting_Popup",
 				"$shared/settings/prefabs/Setting_UI" = "$shared/settings/prefabs/Setting_UI",
 				"$shared/star/prefabs/Star_UI" = "$shared/star/prefabs/Star_UI",
@@ -66,8 +65,7 @@ declare namespace pTS {
 				"game_play/characters/borrum/fbx/Push_All/Push_All" = "game_play/characters/borrum/fbx/Push_All/Push_All",
 				"game_play/characters/borrum/prefabs/Borrum" = "game_play/characters/borrum/prefabs/Borrum",
 				"game_play/characters/ella/fbx/Ella/Ella" = "game_play/characters/ella/fbx/Ella/Ella",
-				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22",
-				"$shared/heart/prefabs/$_Heart_Config" = "$shared/heart/prefabs/$_Heart_Config"
+				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22"
 			}
 			enum Enum_lang_Prefab {
 			}
