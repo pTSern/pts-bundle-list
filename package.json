@@ -142,8 +142,8 @@
         },
         "menu": [
             {
-                "path": "i18n:pts-bundle-list.panel",
-                "label": "Bundle List Manager",
+                "path": "i18n:menu.extension/pTS Bundle List",
+                "label": "Open Panel",
                 "message": "open-panel"
             }
         ],
