@@ -75,8 +75,6 @@ declare namespace pTS {
 			enum Enum_test_2_Prefab {
 				"default_radio_button_off" = "default_radio_button_off"
 			}
-			enum Enum_wonder_match_Prefab {
-			}
 
 			export type TContainer = {
 				game: {
@@ -91,20 +89,16 @@ declare namespace pTS {
 				test_2: {
 					Prefab: typeof Enum_test_2_Prefab;
 				}
-				wonder_match: {
-					Prefab: typeof Enum_wonder_match_Prefab;
-				}
 			}
 
 			export namespace bundle {
-				export const list: ["game", "lang", "test", "test_2", "wonder_match"];
+				export const list: ["game", "lang", "test", "test_2"];
 				export type TType = typeof list[number];
 				export enum Enum {
 					game = "game",
 					lang = "lang",
 					test = "test",
-					test_2 = "test_2",
-					wonder_match = "wonder_match"
+					test_2 = "test_2"
 				}
 				export const CCEnums: { name: TType; value: TType }[];
 			}

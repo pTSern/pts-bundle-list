@@ -29,6 +29,7 @@ export abstract class UI_Base<
     protected abstract _tid: _TId
     abstract get tid(): _TId
 
+    isShared: boolean = false
     @property({ group: pConst.GROUPS.CORE })
     isPopup: boolean = true;
 
