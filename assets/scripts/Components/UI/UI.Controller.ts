@@ -347,7 +347,7 @@ export abstract class UI_Controller<
         this.onFocusInEditor();
     }
 
-    protected async _open<_TWho extends UI_IBase<_T_UI_Id, any>>(_id: _T_UI_Id, _loading: boolean, _data: _$IData, params: Parameters<_TWho['open']>) {
+    protected async _open<_TWho extends UI_IBase<_T_UI_Id, any>>(_id: _T_UI_Id, _loading: boolean, _data: _$IData, params: Parameters<_TWho['open']>, _uis?: _TWho[]) {
         _loading && this.loading.show(true);
 
         if(!_data) {
@@ -381,13 +381,25 @@ export abstract class UI_Controller<
         })
 
         _ui.link(this);
+        if (_uis && !_uis.includes(_ui)) {
+            _uis.push(_ui);
+        }
 
         const _papa = _ui.isPopup ? this.popup : this.screen;
         _papa.addChild(_node);
 
         _loading && this.loading.show(false);
 
-        await _ui.open(...params);
+        try {
+            await _ui.open(...params);
+        } catch (err) {
+            if (_uis) {
+                const _idx = _uis.indexOf(_ui);
+                if (_idx !== -1) _uis.splice(_idx, 1);
+            }
+            _node.destroy();
+            throw err;
+        }
 
         return _ui;
     }
@@ -429,8 +441,8 @@ export abstract class UI_Controller<
         //this._pending.set(_id, _pending + 1);
 
         try {
-            const _out: _TWho = await this._open(_id, _loading, _data, params);
-            if(_out) _uis.push(_out);
+            const _out: _TWho = await this._open(_id, _loading, _data, params, _uis);
+            if(_out && !_uis.includes(_out)) _uis.push(_out);
         } finally {
             this._pending.set(_id, (this._pending.get(_id) ?? 1) - 1);
         }
@@ -471,6 +483,31 @@ export abstract class UI_Controller<
         open ? this._onOpenUI(target, opt as UI_IOpenOpt<_T_UI_Id>) : this._onCloseUI(target, opt as UI_ICloseOpt);
     }
 
+    protected _updateDarkState(target?: UI_IBase<_T_UI_Id, any>, isOpening?: boolean): void {
+        if(!this.dark) return;
+
+        let _is = false;
+        if(target && target.isValid && target.isPopup && isOpening) {
+            _is = true;
+        }
+
+        if(!_is) {
+            this._pool.forEach(_uis => {
+                for(const _ui of _uis) {
+                    if(_ui && _ui.isValid && _ui.isPopup) {
+                        const _opening = (_ui === target) ? isOpening : _ui.isOpening;
+                        if(_opening) {
+                            _is = true;
+                            return;
+                        }
+                    }
+                }
+            });
+        }
+
+        this.dark.active = _is;
+    }
+
     protected _onOpenUI(target: UI_IBase<_T_UI_Id, any>, opt: UI_IOpenOpt<_T_UI_Id>) {
         if(!target || !target.isValid) return;
 
@@ -508,18 +545,7 @@ export abstract class UI_Controller<
             arrBackUpOnce && target.setBackUp(arrBackUpOnce, true);
         }
 
-        if(!!this.dark) {
-            let _is = false;
-            this._pool.forEach(_uis => {
-                for(const _ui of _uis) {
-                    if(_ui && _ui.isValid && _ui.isPopup && _ui.isOpening) {
-                        _is = true;
-                        return;
-                    }
-                }
-            });
-            this.dark.active = _is;
-        }
+        this._updateDarkState(target, true);
     }
 
     protected _onCloseUI(target: UI_IBase<_T_UI_Id, any>, opt: UI_ICloseOpt) {
@@ -540,18 +566,7 @@ export abstract class UI_Controller<
             target.actDestroyCompletly();
         }
 
-        if(!!this.dark) {
-            let _is = false;
-            this._pool.forEach(_uis => {
-                for(const _ui of _uis) {
-                    if(_ui && _ui.isValid && _ui.isPopup && _ui.isOpening) {
-                        _is = true;
-                        return;
-                    }
-                }
-            });
-            this.dark.active = _is;
-        }
+        this._updateDarkState(target, false);
     }
 
     protected update(dt: number): void {
