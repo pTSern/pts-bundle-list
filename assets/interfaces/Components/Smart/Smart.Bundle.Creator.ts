@@ -1,4 +1,4 @@
-import { _decorator, AssetManager, Node, CCClass, CCString, Enum, JsonAsset, Prefab } from 'cc';
+import { _decorator, AssetManager, Node, CCClass, Enum, JsonAsset, Prefab } from 'cc';
 import { Bundle_Manager } from 'db://pts-bundle-list/scripts/bundle/Bundle.Manager';
 import { Editor_PleaseOverride } from 'db://pts-core/scripts/editor/Smart/Editor.PleaseOverride';
 import { CC_IEnumList } from 'db://pts-core/scripts/interfaces/cc/CC.IEnumable';
@@ -8,7 +8,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('Smart_Bundle_Creator._Loader')
 class _Loader {
-    @property({ type: CCString })
+    @property({ })
     protected _type: string = ''
     @property({ type: Enum({}) })
     get type() { return this._type }
