@@ -40,6 +40,10 @@ declare namespace pTS {
 				"game_play/prefabs/elems/GamePlay_Match_Block" = "game_play/prefabs/elems/GamePlay_Match_Block",
 				"game_play/prefabs/elems/GamePlay_Match_Config" = "game_play/prefabs/elems/GamePlay_Match_Config",
 				"game_play/prefabs/lvl/level_1" = "game_play/prefabs/lvl/level_1",
+				"game_play/prefabs/rocks/stone1_2" = "game_play/prefabs/rocks/stone1_2",
+				"game_play/prefabs/rocks/stone2_2" = "game_play/prefabs/rocks/stone2_2",
+				"game_play/prefabs/rocks/stone3_2" = "game_play/prefabs/rocks/stone3_2",
+				"game_play/prefabs/rocks/stone4_2" = "game_play/prefabs/rocks/stone4_2",
 				"game_screen/$lucky_spin/prefabs/$_config" = "game_screen/$lucky_spin/prefabs/$_config",
 				"game_screen/$lucky_spin/prefabs/LuckyItem_x2" = "game_screen/$lucky_spin/prefabs/LuckyItem_x2",
 				"game_screen/$lucky_spin/prefabs/LuckyItem_x3" = "game_screen/$lucky_spin/prefabs/LuckyItem_x3",
@@ -65,7 +69,11 @@ declare namespace pTS {
 				"game_play/characters/borrum/fbx/Push_All/Push_All" = "game_play/characters/borrum/fbx/Push_All/Push_All",
 				"game_play/characters/borrum/prefabs/Borrum" = "game_play/characters/borrum/prefabs/Borrum",
 				"game_play/characters/ella/fbx/Ella/Ella" = "game_play/characters/ella/fbx/Ella/Ella",
-				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22"
+				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22",
+				"game_play/prefabs/rocks-box2d/stone1_2" = "game_play/prefabs/rocks-box2d/stone1_2",
+				"game_play/prefabs/rocks-box2d/stone2_2" = "game_play/prefabs/rocks-box2d/stone2_2",
+				"game_play/prefabs/rocks-box2d/stone3_2" = "game_play/prefabs/rocks-box2d/stone3_2",
+				"game_play/prefabs/rocks-box2d/stone4_2" = "game_play/prefabs/rocks-box2d/stone4_2"
 			}
 			enum Enum_lang_Prefab {
 			}

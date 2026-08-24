@@ -1,4 +1,4 @@
-import { _decorator, Button, CCClass, Component, director } from 'cc';
+import { _decorator, Button, CCClass, director } from 'cc';
 import { CC_EnumList, CC_IEnumable, CC_IEnumList } from 'db://pts-core/scripts/interfaces/cc/CC.IEnumable';
 import { pConst } from 'db://pts-core/scripts/utils';
 import { UI_Controller } from '../UI/UI.Controller';
