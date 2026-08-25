@@ -579,4 +579,4 @@ export namespace UI_Controller {
     export type Bridge = _Bridge_Asseter;
 }
 
-DEV && (globalThis['UI_Controller'] = UI_Controller, UI_Controller['_$pool'] = _$pool);
+DEV && (globalThis['UI_Controller'] = UI_Controller, UI_Controller['_$pool_'] = _$pool);
