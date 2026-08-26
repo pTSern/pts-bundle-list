@@ -1,7 +1,7 @@
-import { _decorator, Asset, CCClass, CCInteger, Component, Enum, instantiate, js, Node, Prefab } from "cc";
+import { _decorator, Asset, CCClass, CCInteger, Color, Component, Enum, instantiate, js, Node, Prefab } from "cc";
 import { Event_Driver } from "db://pts-core/scripts/Components/Event/Event.Driver";
 import { CC_EnumList, CC_IEnumable, CC_IEnumList } from 'db://pts-core/scripts/interfaces/cc/CC.IEnumable'
-import { pConst } from "db://pts-core/scripts/utils";
+import { pConst, pGlobal } from "db://pts-core/scripts/utils";
 import { Bundle_Manager } from "../../bundle/Bundle.Manager";
 import { UI_IBase, UI_ICloseOpt, UI_IOpenOpt } from "../../../interfaces/Components/UI/UI.IBase";
 import { UI_IController } from "db://pts-bundle-list/interfaces/Components/UI/UI.IController";
@@ -76,7 +76,7 @@ class _Bridge_Asseter {
     }
 
     focus(ref: Bundle_Manager<any>, hides: (keyof _Bridge_Asseter)[] = []) {
-        this._manager = ref;
+        this._manager = ref
 
         const _keys = Object.keys(this._manager.all).map(_ => ({ name: _, value: _ }));
 
@@ -204,6 +204,7 @@ class _Helper<_T_UI_Id extends pFlex.TKey> extends Event_Driver.Helper<keyof _TP
     id: _T_UI_Id = "" as _T_UI_Id
 
     emit(key: _T_UI_Id, ...args: any[]): any[] {
+        console.log("[UI_Controller._Helper] emit >>", key, args, this.id);
         if(key != this.id) return;
         return this.flex.emit(this.id, ...args);
     }
@@ -292,6 +293,18 @@ export abstract class UI_Controller<
 
     protected abstract _list: CC_IEnumList<_T_UI_Id, _T_UI_Id>[]  | CC_IEnumable<_T_UI_Id> | _T_UI_Id[]
     get list() { return CC_EnumList(this._list) }
+
+
+    protected _transfomer(): { get(container: Record<any, _Helper<any>>, key: pFlex.TKey, ...args: any[]): _Helper<any>; key(helper: _Helper<any>): string; } {
+        return {
+            get(container, key, ...args) {
+                return container[`${String(key)}_${args[0]}`]
+            },
+            key(helper) {
+                return `${helper.key}_${helper.id}`
+            },
+        }
+    }
 
     protected __preload(): void {
         super.__preload();
@@ -406,10 +419,12 @@ export abstract class UI_Controller<
 
     async open<_TWho extends UI_IBase<_T_UI_Id, any>>(opt: _$IOpenOpt<_T_UI_Id>, ...params: Parameters<_TWho['open']>) {
         const [_id, _loading] = (typeof opt === 'object' ? [opt.id, opt.loading] : [opt, true]) as [_T_UI_Id, boolean];
+        const _msg: any[] = ['Params: \n\tID: ', _id, "\n\tLoading: ", _loading, "\n\tParams: ", params]
 
         const _data = this.bridge.convert(_id);
         if(!_data) {
-            console.warn("[UI_Controller].{open} >> WARN: Invalid Id");
+            _msg.push("\nWARN: Invalid Id");
+            pGlobal.group('DEV', { title: "[UI_Controller].{ open } Warn", color: Color.YELLOW })
             return [];
         }
 
@@ -421,8 +436,6 @@ export abstract class UI_Controller<
 
         const _pending = this._pending.get(_id) ?? 0;
 
-        // Increment pending BEFORE the guard check's await, to prevent race conditions
-        // where multiple concurrent open() calls all read _pending=0 and bypass the max limit.
         this._pending.set(_id, _pending + 1);
 
         if(_data.max > 0 && _uis.length + _pending >= _data.max) {
@@ -432,13 +445,17 @@ export abstract class UI_Controller<
                 if(_ui && _ui.isValid) {
                     !_ui.isOpening && _promises.push(_ui.open(...params));
                 }
-                console.log("[UI_Controller].{open} >> WARN: Max instance reached for UI", _id, " (max:", _data.max, ", current:", _uis.length, ", pending:", _pending, ")", _ui);
+                _msg.push("\nWARN: Max instance reached for UI", "\n\tMax: ", _data.max, "\n\tCurrent: ", _uis.length, "\n\tPending: ", _pending, "\n\tUI: ", _ui);
             }
+            _msg.push("\nPromises: ", _promises);
+
             await Promise.all(_promises);
+            pGlobal.group('DEV', { title: "[UI_Controller].{ open } Warn", color: Color.YELLOW }, _msg);
+
             this.emit('open', _id);
+
             return _uis;
         }
-        //this._pending.set(_id, _pending + 1);
 
         try {
             const _out: _TWho = await this._open(_id, _loading, _data, params, _uis);
@@ -446,6 +463,9 @@ export abstract class UI_Controller<
         } finally {
             this._pending.set(_id, (this._pending.get(_id) ?? 1) - 1);
         }
+
+        _msg.push("\nOpened UI", "\n\tUI: ", _uis);
+        pGlobal.group('DEV', { title: "[UI_Controller].{ open } Info", color: Color.GREEN }, _msg);
 
         this.emit('open', _id);
         return _uis;
@@ -553,7 +573,7 @@ export abstract class UI_Controller<
 
         const { isNotOpenBackUp, isForceDestroy } = opt || { isNotOpenBackUp: false, isForceDestroy: false };
 
-        console.log("[UI_Controller] _onCloseUI >>", target.tid, " isNotOpenBackUp: ", isNotOpenBackUp, " isForceDestroy: ", isForceDestroy, opt);
+        //console.log("[UI_Controller] _onCloseUI >>", target.tid, " isNotOpenBackUp: ", isNotOpenBackUp, " isForceDestroy: ", isForceDestroy, opt);
         !isNotOpenBackUp && target.actOpenBackUp();
 
         const _shouldDestroy = isForceDestroy || target.shouldDestroyOnClose;
