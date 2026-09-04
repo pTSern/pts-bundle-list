@@ -79,12 +79,6 @@ declare namespace pTS {
 			enum Enum_levels_Prefab {
 				"prefabs/level_1" = "prefabs/level_1"
 			}
-			enum Enum_test_Prefab {
-				"fabs/_fab" = "fabs/_fab"
-			}
-			enum Enum_test_2_Prefab {
-				"default_radio_button_off" = "default_radio_button_off"
-			}
 
 			export type TContainer = {
 				game: {
@@ -96,23 +90,15 @@ declare namespace pTS {
 				levels: {
 					Prefab: typeof Enum_levels_Prefab;
 				}
-				test: {
-					Prefab: typeof Enum_test_Prefab;
-				}
-				test_2: {
-					Prefab: typeof Enum_test_2_Prefab;
-				}
 			}
 
 			export namespace bundle {
-				export const list: ["game", "lang", "levels", "test", "test_2"];
+				export const list: ["game", "lang", "levels"];
 				export type TType = typeof list[number];
 				export enum Enum {
 					game = "game",
 					lang = "lang",
-					levels = "levels",
-					test = "test",
-					test_2 = "test_2"
+					levels = "levels"
 				}
 				export const CCEnums: { name: TType; value: TType }[];
 			}
