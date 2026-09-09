@@ -16,7 +16,6 @@ declare namespace pTS {
 				"shop/prefabs/Shop_Coin_Item" = "shop/prefabs/Shop_Coin_Item",
 				"$shared/ads/prefabs/Ads_UI" = "$shared/ads/prefabs/Ads_UI",
 				"$shared/area/prefabs/AreaItem_UI" = "$shared/area/prefabs/AreaItem_UI",
-				"$shared/area/prefabs/ArenaItem_Config" = "$shared/area/prefabs/ArenaItem_Config",
 				"$shared/avatar/prefabs/avatar" = "$shared/avatar/prefabs/avatar",
 				"$shared/avatar/prefabs/Avatar_UI" = "$shared/avatar/prefabs/Avatar_UI",
 				"$shared/avatar/prefabs/frame" = "$shared/avatar/prefabs/frame",
