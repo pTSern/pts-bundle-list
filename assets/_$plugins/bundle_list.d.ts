@@ -9,6 +9,7 @@ declare namespace pTS {
 				"daily_reward/prefabs/DailyReward_Popup" = "daily_reward/prefabs/DailyReward_Popup",
 				"daily_reward/prefabs/RewardItem_UI" = "daily_reward/prefabs/RewardItem_UI",
 				"game_screen/prefabs/GameScreen_Popup" = "game_screen/prefabs/GameScreen_Popup",
+				"level/fabs/level_1" = "level/fabs/level_1",
 				"profile/prefabs/Profile_Popup" = "profile/prefabs/Profile_Popup",
 				"shop/prefabs/HomeScreen_Page_Shop" = "shop/prefabs/HomeScreen_Page_Shop",
 				"shop/prefabs/Shop_Bundle_Item" = "shop/prefabs/Shop_Bundle_Item",
@@ -75,9 +76,6 @@ declare namespace pTS {
 			}
 			enum Enum_lang_Prefab {
 			}
-			enum Enum_levels_Prefab {
-				"prefabs/level_1" = "prefabs/level_1"
-			}
 
 			export type TContainer = {
 				game: {
@@ -86,18 +84,14 @@ declare namespace pTS {
 				lang: {
 					Prefab: typeof Enum_lang_Prefab;
 				}
-				levels: {
-					Prefab: typeof Enum_levels_Prefab;
-				}
 			}
 
 			export namespace bundle {
-				export const list: ["game", "lang", "levels"];
+				export const list: ["game", "lang"];
 				export type TType = typeof list[number];
 				export enum Enum {
 					game = "game",
-					lang = "lang",
-					levels = "levels"
+					lang = "lang"
 				}
 				export const CCEnums: { name: TType; value: TType }[];
 			}
