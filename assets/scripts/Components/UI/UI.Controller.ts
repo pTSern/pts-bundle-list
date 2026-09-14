@@ -21,7 +21,7 @@ interface _$IData {
 }
 
 @ccclass("_Bridge_Asseter")
-class _Bridge_Asseter {
+export class _Bridge_Asseter {
 
     @property({ type: Enum({}), group: pConst.GROUPS.EDITOR })
     get bundle() { return this._bundle }
