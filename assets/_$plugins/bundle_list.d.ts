@@ -72,7 +72,8 @@ declare namespace pTS {
 				"game_play/characters/borrum/fbx/Push_All/Push_All" = "game_play/characters/borrum/fbx/Push_All/Push_All",
 				"game_play/characters/borrum/prefabs/Borrum" = "game_play/characters/borrum/prefabs/Borrum",
 				"game_play/characters/ella/fbx/Ella/Ella" = "game_play/characters/ella/fbx/Ella/Ella",
-				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22"
+				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22",
+				"game_play/characters/borrum/prefabs/UI" = "game_play/characters/borrum/prefabs/UI"
 			}
 			enum Enum_lang_Prefab {
 			}
