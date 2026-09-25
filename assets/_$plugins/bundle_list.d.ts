@@ -71,11 +71,14 @@ declare namespace pTS {
 				"game_play/characters/borrum/fbx/Map_7-16-19-22/Map_7-16-19-22" = "game_play/characters/borrum/fbx/Map_7-16-19-22/Map_7-16-19-22",
 				"game_play/characters/borrum/fbx/Push_All/Push_All" = "game_play/characters/borrum/fbx/Push_All/Push_All",
 				"game_play/characters/borrum/prefabs/Borrum" = "game_play/characters/borrum/prefabs/Borrum",
+				"game_play/characters/borrum/prefabs/UI" = "game_play/characters/borrum/prefabs/UI",
 				"game_play/characters/ella/fbx/Ella/Ella" = "game_play/characters/ella/fbx/Ella/Ella",
 				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22",
-				"game_play/characters/borrum/prefabs/UI" = "game_play/characters/borrum/prefabs/UI"
+				"game_play/prefabs/rocks-box2d/stone1_test" = "game_play/prefabs/rocks-box2d/stone1_test"
 			}
 			enum Enum_lang_Prefab {
+			}
+			enum Enum_test_bund_Prefab {
 			}
 
 			export type TContainer = {
@@ -85,14 +88,18 @@ declare namespace pTS {
 				lang: {
 					Prefab: typeof Enum_lang_Prefab;
 				}
+				test_bund: {
+					Prefab: typeof Enum_test_bund_Prefab;
+				}
 			}
 
 			export namespace bundle {
-				export const list: ["game", "lang"];
+				export const list: ["game", "lang", "test_bund"];
 				export type TType = typeof list[number];
 				export enum Enum {
 					game = "game",
-					lang = "lang"
+					lang = "lang",
+					test_bund = "test_bund"
 				}
 				export const CCEnums: { name: TType; value: TType }[];
 			}
