@@ -44,6 +44,7 @@ declare namespace pTS {
 				"game_play/prefabs/rocks/stone3_2" = "game_play/prefabs/rocks/stone3_2",
 				"game_play/prefabs/rocks/stone4_2" = "game_play/prefabs/rocks/stone4_2",
 				"game_play/prefabs/rocks-box2d/stone1_2" = "game_play/prefabs/rocks-box2d/stone1_2",
+				"game_play/prefabs/rocks-box2d/stone1_test" = "game_play/prefabs/rocks-box2d/stone1_test",
 				"game_play/prefabs/rocks-box2d/stone2_2" = "game_play/prefabs/rocks-box2d/stone2_2",
 				"game_play/prefabs/rocks-box2d/stone3_2" = "game_play/prefabs/rocks-box2d/stone3_2",
 				"game_play/prefabs/rocks-box2d/stone4_2" = "game_play/prefabs/rocks-box2d/stone4_2",
@@ -73,8 +74,7 @@ declare namespace pTS {
 				"game_play/characters/borrum/prefabs/Borrum" = "game_play/characters/borrum/prefabs/Borrum",
 				"game_play/characters/borrum/prefabs/UI" = "game_play/characters/borrum/prefabs/UI",
 				"game_play/characters/ella/fbx/Ella/Ella" = "game_play/characters/ella/fbx/Ella/Ella",
-				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22",
-				"game_play/prefabs/rocks-box2d/stone1_test" = "game_play/prefabs/rocks-box2d/stone1_test"
+				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22"
 			}
 			enum Enum_lang_Prefab {
 			}
