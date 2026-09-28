@@ -9,8 +9,8 @@ declare namespace pTS {
 				"daily_reward/prefabs/DailyReward_Popup" = "daily_reward/prefabs/DailyReward_Popup",
 				"daily_reward/prefabs/RewardItem_UI" = "daily_reward/prefabs/RewardItem_UI",
 				"game_screen/prefabs/GameScreen_Popup" = "game_screen/prefabs/GameScreen_Popup",
-				"level/fabs/level-1" = "level/fabs/level-1",
 				"level/fabs/level_1" = "level/fabs/level_1",
+				"level/fabs/level_1_old" = "level/fabs/level_1_old",
 				"profile/prefabs/Profile_Popup" = "profile/prefabs/Profile_Popup",
 				"shop/prefabs/HomeScreen_Page_Shop" = "shop/prefabs/HomeScreen_Page_Shop",
 				"shop/prefabs/Shop_Bundle_Item" = "shop/prefabs/Shop_Bundle_Item",
@@ -72,7 +72,7 @@ declare namespace pTS {
 				"game_play/characters/borrum/fbx/Map_5_Long_anim/Map_5_Long_anim" = "game_play/characters/borrum/fbx/Map_5_Long_anim/Map_5_Long_anim",
 				"game_play/characters/borrum/fbx/Map_7-16-19-22/Map_7-16-19-22" = "game_play/characters/borrum/fbx/Map_7-16-19-22/Map_7-16-19-22",
 				"game_play/characters/borrum/fbx/Push_All/Push_All" = "game_play/characters/borrum/fbx/Push_All/Push_All",
-				"game_play/characters/borrum/prefabs/Borrum" = "game_play/characters/borrum/prefabs/Borrum",
+				"game_play/characters/borrum/prefabs/Borrum_With_Strength" = "game_play/characters/borrum/prefabs/Borrum_With_Strength",
 				"game_play/characters/borrum/prefabs/UI" = "game_play/characters/borrum/prefabs/UI",
 				"game_play/characters/ella/fbx/Ella/Ella" = "game_play/characters/ella/fbx/Ella/Ella",
 				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22"
