@@ -151,9 +151,13 @@ export class Bundle_Manager<
 
     load<_TKey extends keyof _TAll>(bundle: _TKey) {
         if(!this._all || !bundle) return;
-        console.log(`[ Assets_BundleManager ].{ load } 1`, bundle);
-         return new Promise<AssetManager.Bundle>( (_rs, _rj) => {
-            console.log(`[ Assets_BundleManager ].{ load } 2`, bundle);
+        const _bundle = this.at(bundle);
+        if(!!_bundle) {
+            this._$resolve(bundle, _bundle);
+            return Promise.resolve(_bundle);
+        }
+
+        return new Promise<AssetManager.Bundle>( (_rs, _rj) => {
             const _path = bundle.toString();
 
             assetManager.loadBundle(_path, async (_error, _bundle) => {
