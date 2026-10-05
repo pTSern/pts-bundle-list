@@ -1,5 +1,5 @@
 import { pDriver } from "db://pts-core/scripts/utils";
-import { js, Layers, Node } from "cc";
+import { Component, js, Layers, Node } from "cc";
 import { UI_IController } from "./UI.IController";
 
 export type UI_TParams = {
@@ -22,7 +22,7 @@ export interface UI_IOpenOpt<_TId extends pFlex.TKey> {
 export interface UI_IBase<
     _TId extends pFlex.TKey,
     _TParams extends UI_TParams,
-> extends pDriver.IDriver<{ onBeforeOpen: _TParams['open'], onAfterOpen: _TParams['open'], onBeforeClose: _TParams['close'], onAfterClose: _TParams['close'] }> {
+> extends pDriver.IDriver<{ onBeforeOpen: _TParams['open'], onAfterOpen: _TParams['open'], onBeforeClose: _TParams['close'], onAfterClose: _TParams['close'] }>, Component {
 
     get tid(): _TId;
     get isValid(): boolean;
