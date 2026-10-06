@@ -11,6 +11,7 @@ declare namespace pTS {
 				"game_screen/prefabs/GameScreen_Popup" = "game_screen/prefabs/GameScreen_Popup",
 				"level/fabs/level_1" = "level/fabs/level_1",
 				"level/fabs/level_1_old" = "level/fabs/level_1_old",
+				"level/fabs/level_2" = "level/fabs/level_2",
 				"profile/prefabs/Profile_Popup" = "profile/prefabs/Profile_Popup",
 				"shop/prefabs/HomeScreen_Page_Shop" = "shop/prefabs/HomeScreen_Page_Shop",
 				"shop/prefabs/Shop_Bundle_Item" = "shop/prefabs/Shop_Bundle_Item",
@@ -74,8 +75,7 @@ declare namespace pTS {
 				"game_play/characters/borrum/fbx/Push_All/Push_All" = "game_play/characters/borrum/fbx/Push_All/Push_All",
 				"game_play/characters/borrum/prefabs/Borrum_With_Strength" = "game_play/characters/borrum/prefabs/Borrum_With_Strength",
 				"game_play/characters/ella/fbx/Ella/Ella" = "game_play/characters/ella/fbx/Ella/Ella",
-				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22",
-				"level/fabs/level_2" = "level/fabs/level_2"
+				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22"
 			}
 			enum Enum_lang_Prefab {
 			}
