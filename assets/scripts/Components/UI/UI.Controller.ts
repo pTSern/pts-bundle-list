@@ -571,7 +571,15 @@ export abstract class UI_Controller<
     protected _onCloseUI(target: UI_IBase<_T_UI_Id, any>, opt: UI_ICloseOpt) {
         if(!target || !target.isValid) return;
 
-        const { isNotOpenBackUp, isForceDestroy } = opt || { isNotOpenBackUp: false, isForceDestroy: false };
+        const { isNotOpenBackUp, isForceDestroy, cleaners } = opt || { isNotOpenBackUp: false, isForceDestroy: false };
+
+        if(Array.isArray(cleaners)) {
+            for(const _event of cleaners) {
+                target.clear(_event);
+            }
+        } else if(cleaners === true) {
+            target.flush();
+        }
 
         //console.log("[UI_Controller] _onCloseUI >>", target.tid, " isNotOpenBackUp: ", isNotOpenBackUp, " isForceDestroy: ", isForceDestroy, opt);
         !isNotOpenBackUp && target.actOpenBackUp();

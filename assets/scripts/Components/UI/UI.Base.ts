@@ -1,14 +1,11 @@
-import { _decorator, Button, CCString, Component, log, Node } from "cc";
+import { _decorator, Button, CCString, Component, Node } from "cc";
 import { pArray, pConst, pEngine, pGlobal } from "db://pts-core/scripts/utils";
 import { Event_Driver } from "db://pts-core/scripts/Components/Event/Event.Driver";
-import { UI_IBase, UI_ICloseOpt, UI_IOpenOpt, UI_TParams } from "../../../interfaces/Components/UI/UI.IBase";
+import { _$events, UI_IBase, UI_ICloseOpt, UI_IOpenOpt, UI_TParams } from "../../../interfaces/Components/UI/UI.IBase";
 import { UI_IController } from "db://pts-bundle-list/interfaces/Components/UI/UI.IController";
 import { editor_property } from "db://pts-core/scripts/utils/pClass";
-import { DEV } from "cc/env";
 
 const { ccclass, property } = _decorator;
-
-const _$events = ['onBeforeOpen', 'onAfterOpen', 'onBeforeClose', 'onAfterClose'] as const;
 
 type _$TParam<_TParams extends UI_TParams> = {
     onBeforeOpen: _TParams['open']
@@ -83,24 +80,23 @@ export abstract class UI_Base<
 
     async open(opt: UI_IOpenOpt<_TId>, ...args: Parameters<_TParams["open"]>): Promise<ReturnType<_TParams["open"]>> {
         if(!this._owner || !this._owner.isValid) return;
-        pGlobal.log('DEV', '[UI_Base] Open >>', this, " with opt ", opt, ' args ', ...args);
+        const _ism = Boolean(!opt?.silent);
+        pGlobal.log({ group: "UI_Base", level: "DEV" }, 'Opened: ', this, "\nOpt: ", opt, "\nArgs: ", ...args, "\nIsSilent: ", _ism);
 
-        this.emit('onBeforeOpen', ...args);
+        _ism && this.emit('onBeforeOpen', ...args);
         this._onBeforeOpen?.(...args);
 
         this._isOpened = true;
         this._owner.setup(this, true, opt);
 
         const _out = this._opener ? await this._opener(...args) : (this.root.active = true, void 0);
-        this.emit('onAfterOpen', ...args);
+        _ism && this.emit('onAfterOpen', ...args);
         this._onAfterOpen?.(_out, ...args);
 
         return _out as ReturnType<_TParams["open"]>;
     }
 
     async actOpenBackUp() {
-        console.log('[UI_Base] actOpenBackUp >>', this, ' opened backups ', this.backups, ' and once backups ', this._arrBackUpOnce, this._owner);
-
         const _list = pArray.unique([...this.backups, ...this._arrBackUpOnce], _ => _ !== this.tid);
         await Promise.all(_list.map(_ => this._owner.open(_, {})))
 
@@ -109,16 +105,17 @@ export abstract class UI_Base<
 
     async close(opt?: UI_ICloseOpt, ...args: Parameters<_TParams["close"]>): Promise<ReturnType<_TParams["close"]>> {
         if(!this._owner || !this._owner.isValid) return;
-        DEV && log('[UI_Base] Close >>', this, " with opt ", opt, ' args ', ...args);
+        pGlobal.log({ group: "UI_Base", level: "DEV" }, 'Closed: ', this, "\nOpt: ", opt, "\nArgs: ", ...args);
+        const _is = Boolean(!opt?.silent);
 
-        this.emit('onBeforeClose', ...args);
+        _is && this.emit('onBeforeClose', ...args);
         this._onBeforeClose?.(...args);
 
         this._isOpened = false;
         this._owner.setup(this, false, opt);
 
         const _out = this._closer ? await this._closer(...args) : (this.root.active = false, void 0);
-        this.emit('onAfterClose', ...args);
+        _is && this.emit('onAfterClose', ...args);
         this._onAfterClose?.(_out, ...args);
 
         return _out as ReturnType<_TParams["close"]>
