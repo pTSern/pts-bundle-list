@@ -30,6 +30,7 @@ declare namespace pTS {
 				"$shared/settings/prefabs/Setting_UI" = "$shared/settings/prefabs/Setting_UI",
 				"$shared/star/prefabs/Star_UI" = "$shared/star/prefabs/Star_UI",
 				"$shared/start_game/prefabs/StartGame_UI" = "$shared/start_game/prefabs/StartGame_UI",
+				"$shared/_$shared/fx/Fx" = "$shared/_$shared/fx/Fx",
 				"decorator/$builder/prefabs/$_data" = "decorator/$builder/prefabs/$_data",
 				"decorator/$builder/prefabs/Decorator_Builder_UI" = "decorator/$builder/prefabs/Decorator_Builder_UI",
 				"decorator/$level/prefabs/item_ui" = "decorator/$level/prefabs/item_ui",
