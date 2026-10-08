@@ -7,9 +7,14 @@ export type UI_TParams = {
     close(...args: any[]): any
 }
 
+export const _$events = ['onBeforeOpen', 'onAfterOpen', 'onBeforeClose', 'onAfterClose'] as const;
+type _TEvent = typeof _$events[number];
+
 export interface UI_ICloseOpt {
     isForceDestroy?: boolean;
     isNotOpenBackUp?: boolean;
+    silent?: boolean;
+    cleaners?: _TEvent[] | boolean
 }
 
 export interface UI_IOpenOpt<_TId extends pFlex.TKey> {
@@ -17,6 +22,7 @@ export interface UI_IOpenOpt<_TId extends pFlex.TKey> {
     isOnTop?: boolean
     layer?: Layers.Enum
     arrBackUpOnce?: _TId[];
+    silent?: boolean;
 }
 
 export interface UI_IBase<
