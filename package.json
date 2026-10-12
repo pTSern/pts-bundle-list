@@ -142,7 +142,7 @@
         },
         "menu": [
             {
-                "path": "i18n:menu.extension/pTS Bundle List",
+                "path": "i18n:menu.extension/pTS-Bundle",
                 "label": "Open Panel",
                 "message": "open-panel"
             }
