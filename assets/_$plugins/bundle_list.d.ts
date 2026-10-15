@@ -139,7 +139,10 @@ declare namespace pTS {
 				"game_play/characters/ella/fbx/Ella_map22/Ella_map22" = "game_play/characters/ella/fbx/Ella_map22/Ella_map22",
 				"game_play/characters/guard/fabs/Guard" = "game_play/characters/guard/fabs/Guard",
 				"game_play/characters/head_robot/fabs/Head_Robot" = "game_play/characters/head_robot/fabs/Head_Robot",
-				"game_play/characters/plane/fabs/Plane" = "game_play/characters/plane/fabs/Plane"
+				"game_play/characters/plane/fabs/Plane" = "game_play/characters/plane/fabs/Plane",
+				"game_play/elements/laser/fabs/Laser_Emitter" = "game_play/elements/laser/fabs/Laser_Emitter",
+				"game_play/elements/laser/fabs/Laser_Line" = "game_play/elements/laser/fabs/Laser_Line",
+				"game_play/elements/laser/fabs/Laser_Mirror" = "game_play/elements/laser/fabs/Laser_Mirror"
 			}
 			enum Enum_lang_Prefab {
 			}
