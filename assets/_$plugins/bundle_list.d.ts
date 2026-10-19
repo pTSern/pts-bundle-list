@@ -95,6 +95,7 @@ declare namespace pTS {
 				"decorator/level_1/prefab/Level_UI_1" = "decorator/level_1/prefab/Level_UI_1",
 				"decorator/level_2/prefab/$_config_level_2" = "decorator/level_2/prefab/$_config_level_2",
 				"decorator/level_2/prefab/Level_UI_2" = "decorator/level_2/prefab/Level_UI_2",
+				"game_play/prefabs/bombs/bomb_1" = "game_play/prefabs/bombs/bomb_1",
 				"game_play/prefabs/elems/CELL" = "game_play/prefabs/elems/CELL",
 				"game_play/prefabs/elems/GamePlay_Elem_Drill" = "game_play/prefabs/elems/GamePlay_Elem_Drill",
 				"game_play/prefabs/elems/GamePlay_Match_Block" = "game_play/prefabs/elems/GamePlay_Match_Block",
