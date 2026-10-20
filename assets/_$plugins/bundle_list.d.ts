@@ -143,7 +143,8 @@ declare namespace pTS {
 				"game_play/characters/plane/fabs/Plane" = "game_play/characters/plane/fabs/Plane",
 				"game_play/elements/laser/fabs/Laser_Emitter" = "game_play/elements/laser/fabs/Laser_Emitter",
 				"game_play/elements/laser/fabs/Laser_Line" = "game_play/elements/laser/fabs/Laser_Line",
-				"game_play/elements/laser/fabs/Laser_Mirror" = "game_play/elements/laser/fabs/Laser_Mirror"
+				"game_play/elements/laser/fabs/Laser_Mirror" = "game_play/elements/laser/fabs/Laser_Mirror",
+				"game_play/characters/_$share/prefabs/Health_UI" = "game_play/characters/_$share/prefabs/Health_UI"
 			}
 			enum Enum_lang_Prefab {
 			}
