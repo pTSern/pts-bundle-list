@@ -30,6 +30,7 @@ declare namespace pTS {
 				"effect/fabs/VFX_Enemy_Snowman" = "effect/fabs/VFX_Enemy_Snowman",
 				"effect/fabs/VFX_Hachiman_Skill_Explosion" = "effect/fabs/VFX_Hachiman_Skill_Explosion",
 				"game_screen/prefabs/GameScreen_Popup" = "game_screen/prefabs/GameScreen_Popup",
+				"level/example/level_1_water" = "level/example/level_1_water",
 				"level/fabs/level_1" = "level/fabs/level_1",
 				"level/fabs/level_10" = "level/fabs/level_10",
 				"level/fabs/level_11" = "level/fabs/level_11",
@@ -164,6 +165,7 @@ declare namespace pTS {
 				"game_play/characters/borrum/fbx/Map_5_Long_anim/Map_5_Long_anim" = "game_play/characters/borrum/fbx/Map_5_Long_anim/Map_5_Long_anim",
 				"game_play/characters/borrum/fbx/Map_7-16-19-22/Map_7-16-19-22" = "game_play/characters/borrum/fbx/Map_7-16-19-22/Map_7-16-19-22",
 				"game_play/characters/borrum/fbx/Push_All/Push_All" = "game_play/characters/borrum/fbx/Push_All/Push_All",
+				"game_play/characters/borrum/prefabs/Borrum_Fight" = "game_play/characters/borrum/prefabs/Borrum_Fight",
 				"game_play/characters/borrum/prefabs/Borrum_Stand_Strength" = "game_play/characters/borrum/prefabs/Borrum_Stand_Strength",
 				"game_play/characters/borrum/prefabs/Borrum_With_Strength" = "game_play/characters/borrum/prefabs/Borrum_With_Strength",
 				"game_play/characters/boss/fabs/Boss" = "game_play/characters/boss/fabs/Boss",
@@ -195,7 +197,8 @@ declare namespace pTS {
 				"game_play/elements/traps/fabs/Trap_Fire" = "game_play/elements/traps/fabs/Trap_Fire",
 				"game_play/elements/traps/fabs/Trap_Lava" = "game_play/elements/traps/fabs/Trap_Lava",
 				"game_play/elements/traps/fabs/Trap_Pulley" = "game_play/elements/traps/fabs/Trap_Pulley",
-				"game_play/elements/traps/fabs/Trap_Saw" = "game_play/elements/traps/fabs/Trap_Saw"
+				"game_play/elements/traps/fabs/Trap_Saw" = "game_play/elements/traps/fabs/Trap_Saw",
+				"game_play/characters/_$share/prefabs/Strength_HealthStyle_UI" = "game_play/characters/_$share/prefabs/Strength_HealthStyle_UI"
 			}
 			enum Enum_lang_Prefab {
 			}

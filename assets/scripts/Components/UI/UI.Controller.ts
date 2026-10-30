@@ -168,7 +168,7 @@ class _Bridge_UIToAsset<
         this.focus(this.ref);
     }
 
-    protected _$map = js.createMap<Record<any, _$IData>>(true);
+    protected _$map = js.createMap(true) as Record<_T_UI_Id, _$IData>;
     convert(ui: _T_UI_Id): _$IData | undefined {
         let _out = this._$map[ui];
         if(!!_out) return _out;
@@ -474,6 +474,7 @@ export abstract class UI_Controller<
     async close<_TWho extends UI_IBase<_T_UI_Id, any>>(id: _T_UI_Id, ...params: Parameters<_TWho["close"]>): Promise<void> {
         const _uis = this._pool.get(id);
         if(!_uis) return;
+        pGlobal.group('DEV', { title: "[UI_Controller].{ close } Info", color: Color.GREEN }, ["Closing UI", "\n\tID: ", id, "\n\tParams: ", params, "\n\tUI: ", _uis]);
 
         this.loading.show(true);
 
@@ -537,13 +538,11 @@ export abstract class UI_Controller<
             }
             this._scene = target.tid;
 
-            if(this.screen) {
-                const _others = this.screen.getComponentsInChildren(UI_IBase.CCClass) as (Component & UI_IBase<_T_UI_Id, any>)[];
-                for(const _other of _others) {
-                    if(_other && _other.isValid && _other !== target && !_other.isPopup && _other.isOpening) {
-                        _other.close({ isNotOpenBackUp: true });
-                    }
-                }
+            const _others = this.screen.getComponentsInChildren(UI_IBase.CCClass) as (Component & UI_IBase<_T_UI_Id, any>)[];
+            for(const _other of _others) {
+                const _is = _other && _other.isValid && _other !== target && !_other.isPopup && _other.isOpening;
+                pGlobal.log('DEV', "[UI_Controller] _onOpenUI >> Closing other screen", "\n\tTarget: ", target, "\n\tOther: ", _other, "\n\tIsOpening: ", _other.isOpening, "\n\tIsPopup: ", _other.isPopup, "\n\tIsValid: ", _other.isValid, "\n\tClosing: ", _is);
+                _is && _other.close({ isNotOpenBackUp: true });
             }
         }
 
