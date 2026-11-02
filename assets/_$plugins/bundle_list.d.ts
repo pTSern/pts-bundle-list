@@ -178,6 +178,7 @@ declare namespace pTS {
 				"game_play/characters/head_robot/fabs/Head_Robot" = "game_play/characters/head_robot/fabs/Head_Robot",
 				"game_play/characters/plane/fabs/Plane" = "game_play/characters/plane/fabs/Plane",
 				"game_play/characters/_$share/prefabs/Health_UI" = "game_play/characters/_$share/prefabs/Health_UI",
+				"game_play/characters/_$share/prefabs/Strength_HealthStyle_UI" = "game_play/characters/_$share/prefabs/Strength_HealthStyle_UI",
 				"game_play/characters/_$share/prefabs/Strength_UI" = "game_play/characters/_$share/prefabs/Strength_UI",
 				"game_play/elements/clearable/fabs/BombWall" = "game_play/elements/clearable/fabs/BombWall",
 				"game_play/elements/clearable/fabs/BrickObstacle" = "game_play/elements/clearable/fabs/BrickObstacle",
@@ -197,8 +198,7 @@ declare namespace pTS {
 				"game_play/elements/traps/fabs/Trap_Fire" = "game_play/elements/traps/fabs/Trap_Fire",
 				"game_play/elements/traps/fabs/Trap_Lava" = "game_play/elements/traps/fabs/Trap_Lava",
 				"game_play/elements/traps/fabs/Trap_Pulley" = "game_play/elements/traps/fabs/Trap_Pulley",
-				"game_play/elements/traps/fabs/Trap_Saw" = "game_play/elements/traps/fabs/Trap_Saw",
-				"game_play/characters/_$share/prefabs/Strength_HealthStyle_UI" = "game_play/characters/_$share/prefabs/Strength_HealthStyle_UI"
+				"game_play/elements/traps/fabs/Trap_Saw" = "game_play/elements/traps/fabs/Trap_Saw"
 			}
 			enum Enum_lang_Prefab {
 			}
