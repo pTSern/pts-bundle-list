@@ -13,7 +13,7 @@ declare namespace pTS {
 				"effect/fabs/Dark_Hole" = "effect/fabs/Dark_Hole",
 				"effect/fabs/DestroyByLaserFx" = "effect/fabs/DestroyByLaserFx",
 				"effect/fabs/effect_forest" = "effect/fabs/effect_forest",
-				"effect/fabs/Explosion 4" = "effect/fabs/Explosion 4",
+				"effect/fabs/Explosion_4" = "effect/fabs/Explosion_4",
 				"effect/fabs/Fireball" = "effect/fabs/Fireball",
 				"effect/fabs/FireFxGroup" = "effect/fabs/FireFxGroup",
 				"effect/fabs/Fx_Fx" = "effect/fabs/Fx_Fx",
@@ -166,7 +166,7 @@ declare namespace pTS {
 				"game_play/characters/borrum/fbx/Map_7-16-19-22/Map_7-16-19-22" = "game_play/characters/borrum/fbx/Map_7-16-19-22/Map_7-16-19-22",
 				"game_play/characters/borrum/fbx/Push_All/Push_All" = "game_play/characters/borrum/fbx/Push_All/Push_All",
 				"game_play/characters/borrum/prefabs/Borrum_Fight" = "game_play/characters/borrum/prefabs/Borrum_Fight",
-				"game_play/characters/borrum/prefabs/Borrum_Stand_Strength" = "game_play/characters/borrum/prefabs/Borrum_Stand_Strength",
+				"game_play/characters/borrum/prefabs/Borrum_Hagging_Strength" = "game_play/characters/borrum/prefabs/Borrum_Hagging_Strength",
 				"game_play/characters/borrum/prefabs/Borrum_With_Strength" = "game_play/characters/borrum/prefabs/Borrum_With_Strength",
 				"game_play/characters/boss/fabs/Boss" = "game_play/characters/boss/fabs/Boss",
 				"game_play/characters/dog_robot/fabs/Dog" = "game_play/characters/dog_robot/fabs/Dog",
@@ -198,11 +198,10 @@ declare namespace pTS {
 				"game_play/elements/traps/fabs/Trap_Fire" = "game_play/elements/traps/fabs/Trap_Fire",
 				"game_play/elements/traps/fabs/Trap_Lava" = "game_play/elements/traps/fabs/Trap_Lava",
 				"game_play/elements/traps/fabs/Trap_Pulley" = "game_play/elements/traps/fabs/Trap_Pulley",
-				"game_play/elements/traps/fabs/Trap_Saw" = "game_play/elements/traps/fabs/Trap_Saw"
+				"game_play/elements/traps/fabs/Trap_Saw" = "game_play/elements/traps/fabs/Trap_Saw",
+				"game_play/characters/borrum/prefabs/Borrum_Stand_Strength" = "game_play/characters/borrum/prefabs/Borrum_Stand_Strength"
 			}
 			enum Enum_lang_Prefab {
-			}
-			enum Enum_test_bund_Prefab {
 			}
 
 			export type TContainer = {
@@ -212,18 +211,14 @@ declare namespace pTS {
 				lang: {
 					Prefab: typeof Enum_lang_Prefab;
 				}
-				test_bund: {
-					Prefab: typeof Enum_test_bund_Prefab;
-				}
 			}
 
 			export namespace bundle {
-				export const list: ["game", "lang", "test_bund"];
+				export const list: ["game", "lang"];
 				export type TType = typeof list[number];
 				export enum Enum {
 					game = "game",
-					lang = "lang",
-					test_bund = "test_bund"
+					lang = "lang"
 				}
 				export const CCEnums: { name: TType; value: TType }[];
 			}
