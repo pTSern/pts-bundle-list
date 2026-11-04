@@ -167,6 +167,7 @@ declare namespace pTS {
 				"game_play/characters/borrum/fbx/Push_All/Push_All" = "game_play/characters/borrum/fbx/Push_All/Push_All",
 				"game_play/characters/borrum/prefabs/Borrum_Fight" = "game_play/characters/borrum/prefabs/Borrum_Fight",
 				"game_play/characters/borrum/prefabs/Borrum_Hagging_Strength" = "game_play/characters/borrum/prefabs/Borrum_Hagging_Strength",
+				"game_play/characters/borrum/prefabs/Borrum_Stand_Strength" = "game_play/characters/borrum/prefabs/Borrum_Stand_Strength",
 				"game_play/characters/borrum/prefabs/Borrum_With_Strength" = "game_play/characters/borrum/prefabs/Borrum_With_Strength",
 				"game_play/characters/boss/fabs/Boss" = "game_play/characters/boss/fabs/Boss",
 				"game_play/characters/dog_robot/fabs/Dog" = "game_play/characters/dog_robot/fabs/Dog",
@@ -198,8 +199,7 @@ declare namespace pTS {
 				"game_play/elements/traps/fabs/Trap_Fire" = "game_play/elements/traps/fabs/Trap_Fire",
 				"game_play/elements/traps/fabs/Trap_Lava" = "game_play/elements/traps/fabs/Trap_Lava",
 				"game_play/elements/traps/fabs/Trap_Pulley" = "game_play/elements/traps/fabs/Trap_Pulley",
-				"game_play/elements/traps/fabs/Trap_Saw" = "game_play/elements/traps/fabs/Trap_Saw",
-				"game_play/characters/borrum/prefabs/Borrum_Stand_Strength" = "game_play/characters/borrum/prefabs/Borrum_Stand_Strength"
+				"game_play/elements/traps/fabs/Trap_Saw" = "game_play/elements/traps/fabs/Trap_Saw"
 			}
 			enum Enum_lang_Prefab {
 			}
