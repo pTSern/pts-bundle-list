@@ -148,8 +148,8 @@ async function _getConfig() {
 
     __this_.filters = __this_.filters || new Set<string>();
     (typeof _proj.is_listing_prefabs === 'boolean' ? _proj.is_listing_prefabs : true) && __this_.filters.add("cc.Prefab");
-    (Boolean(_proj.is_listing_json)) && __this_.filters.add("cc.JsonAsset");
-    (Boolean(_proj.is_listing_imgs)) && __this_.filters.add("cc.ImageAsset");
+    (typeof _proj.is_listing_json === 'boolean' ? _proj.is_listing_json : true) && __this_.filters.add("cc.JsonAsset");
+    (typeof _proj.is_listing_imgs === 'boolean' ? _proj.is_listing_imgs : true) && __this_.filters.add("cc.ImageAsset");
 
     return __config_;
 }
@@ -388,22 +388,23 @@ declare namespace pTS {
         fs.writeFileSync(jsPath, _js, 'utf8');
         await Editor.Message.request('asset-db', 'refresh-asset', jsUrl);
 
-        // Update meta for JS to make it a plugin
-        const __objMeta = await Editor.Message.request('asset-db', 'query-asset-meta', jsUrl) as IAssetMeta;
-        console.log(`[${pkg.name}] >> _OBJ MEta >>`, __objMeta);
+        // Update physical .meta directly (extension asset-db mount is readonly: true, so save-asset-meta IPC is blocked)
+        const jsMetaPath = `${jsPath}.meta`;
+        const __objPluginSettings: Record<string, any> = {
+            isPlugin: true,
+            loadPluginInWeb: true,
+            loadPluginInNative: true,
+            loadPluginInEditor: true,
+            loadPluginInPreview: true,
+            loadPluginInMiniGame: true,
+            executionScope: "enclosed",
+            simulateGlobals: ["window", "self", "global"],
+        };
 
-        if (__objMeta) {
+        if (fs.existsSync(jsMetaPath)) {
+            const rawMeta = fs.readFileSync(jsMetaPath, 'utf8');
+            const __objMeta = JSON.parse(rawMeta);
             __objMeta.userData = __objMeta.userData || {};
-            const __objPluginSettings: Record<string, any> = {
-                isPlugin: true,
-                loadPluginInWeb: true,
-                loadPluginInNative: true,
-                loadPluginInEditor: true,
-                loadPluginInPreview: true,
-                loadPluginInMiniGame: true,
-                executionScope: "enclosed",
-                simulateGlobals: ["window", "self", "global"],
-            };
 
             let __bNeedUpdate = false;
             for (const __strKey in __objPluginSettings) {
@@ -419,7 +420,7 @@ declare namespace pTS {
             }
 
             if (__bNeedUpdate) {
-                await Editor.Message.request('asset-db', 'save-asset-meta', __objMeta.uuid, JSON.stringify(__objMeta));
+                fs.writeFileSync(jsMetaPath, JSON.stringify(__objMeta, null, 2), 'utf8');
                 await Editor.Message.request('asset-db', 'refresh-asset', jsUrl);
             }
         }
@@ -432,6 +433,10 @@ declare namespace pTS {
     } catch (e) {
         console.error(`${pkg.name} >> Failed to write plugin assets`, e);
     }
+}
+
+function _asset_db_ready() {
+    _shiping();
 }
 
 function _asset_db_notify(uuid: string, event: AssetInfo, meta: IAssetMeta) {
@@ -454,10 +459,15 @@ function _bind(what: string | string[], func: Function, add: boolean) {
 
 export function load() {
     checkPtsCoreDependency(false);
-    _bind(['asset-db:ready', 'asset-db:asset-add', 'asset-db:asset-change', 'asset-db:asset-delete'], _asset_db_notify, true);
-    _getConfig().then(_ => __this_.resolver());
+    _bind('asset-db:ready', _asset_db_ready, true);
+    _bind(['asset-db:asset-add', 'asset-db:asset-change', 'asset-db:asset-delete'], _asset_db_notify, true);
+    _getConfig().then(() => {
+        __this_.resolver();
+        _shiping();
+    });
 }
 
 export function unload() {
-    _bind(['asset-db:ready', 'asset-db:asset-add', 'asset-db:asset-change', 'asset-db:asset-delete'], _asset_db_notify, false);
+    _bind('asset-db:ready', _asset_db_ready, false);
+    _bind(['asset-db:asset-add', 'asset-db:asset-change', 'asset-db:asset-delete'], _asset_db_notify, false);
 }
