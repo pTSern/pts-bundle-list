@@ -15,7 +15,7 @@ interface _IThis {
     resolver: Function;
 }
 
-const PLUGIN_NAME = 'bundle_list';
+const PLUGIN_NAME = 'pts_bundles';
 
 const __config_: _IConfig = Object.create(null);
 const __this_: _IThis = Object.create(null);
@@ -222,8 +222,8 @@ async function _generator(list: ({ meta: IAssetMeta; info: AssetInfo } | undefin
         _typeObj[t] = t;
     }
 
-    // Generate JS (compact/minified)
-    let _js = `const _$enums=${JSON.stringify(_enums)};`;
+    // Generate JS (compact/minified, safe UMD/IIFE root wrapper)
+    let _js = `(function(root){"use strict";const _$enums=${JSON.stringify(_enums)};`;
 
     // Write all Enum_${bundle}_${type} constants
     for (const key of enumKeys) {
@@ -234,7 +234,7 @@ async function _generator(list: ({ meta: IAssetMeta; info: AssetInfo } | undefin
     }
 
     if (_parts.length === 1) {
-        _js += `globalThis['${_parts[0]}']={`;
+        _js += `root['${_parts[0]}']={`;
         _js += `container:_$enums,`;
         _js += `get:(_$k,_$t)=>_$enums[_$k][_$t],`;
         _js += `bundle:{`;
@@ -256,7 +256,7 @@ async function _generator(list: ({ meta: IAssetMeta; info: AssetInfo } | undefin
         }
         _js += `};`;
     } else {
-        _js += `const _$=globalThis['${_parts[0]}']=globalThis['${_parts[0]}']||Object.create(null);`;
+        _js += `const _$=root['${_parts[0]}']=root['${_parts[0]}']||Object.create(null);`;
         let access = `_$`;
         for (let i = 1; i < _parts.length - 1; i++) {
             const part = _parts[i];
@@ -287,8 +287,10 @@ async function _generator(list: ({ meta: IAssetMeta; info: AssetInfo } | undefin
     }
 
     if (__config_.is_registered_to_bridge) {
-        _js += `const _$pts=globalThis.pTS;if(!!_$pts){const _$bridge=_$pts.bridge;(!!_$bridge&&typeof _$bridge.set=='function')?_$bridge.set('bundles',globalThis['${_parts.join("']['")}'].bundle.Enum):console.warn('[pTS.bridge] is not defined');}`;
+        _js += `const _$pts=root.pTS;if(!!_$pts){const _$bridge=_$pts.bridge;(!!_$bridge&&typeof _$bridge.set=='function')?_$bridge.set('bundles',root['${_parts.join("']['")}'].bundle.Enum):console.warn('[pTS.bridge] is not defined');}`;
     }
+
+    _js += `})(typeof globalThis!=="undefined"?globalThis:(typeof window!=="undefined"?window:(typeof self!=="undefined"?self:this)));\n`;
 
     // Generate d.ts
     let _dts = "";
@@ -392,19 +394,26 @@ declare namespace pTS {
 
         if (__objMeta) {
             __objMeta.userData = __objMeta.userData || {};
-            const __objPluginSettings = {
+            const __objPluginSettings: Record<string, any> = {
                 isPlugin: true,
                 loadPluginInWeb: true,
                 loadPluginInNative: true,
                 loadPluginInEditor: true,
                 loadPluginInPreview: true,
-                loadPluginInMiniGame: true
+                loadPluginInMiniGame: true,
+                executionScope: "enclosed",
+                simulateGlobals: ["window", "self", "global"],
             };
 
             let __bNeedUpdate = false;
             for (const __strKey in __objPluginSettings) {
-                if (__objMeta.userData[__strKey] !== (__objPluginSettings as any)[__strKey]) {
-                    __objMeta.userData[__strKey] = (__objPluginSettings as any)[__strKey];
+                const expected = __objPluginSettings[__strKey];
+                const current = __objMeta.userData[__strKey];
+                const same = Array.isArray(expected)
+                    ? Array.isArray(current) && JSON.stringify(current) === JSON.stringify(expected)
+                    : current === expected;
+                if (!same) {
+                    __objMeta.userData[__strKey] = expected;
                     __bNeedUpdate = true;
                 }
             }
@@ -419,7 +428,7 @@ declare namespace pTS {
         fs.writeFileSync(dtsPath, _dts, 'utf8');
         await Editor.Message.request('asset-db', 'refresh-asset', dtsUrl);
 
-        console.log(`[${pkg.name}] Successfully generated bundle_list plugin files inside extension at: ${jsUrl}`);
+        console.log(`[${pkg.name}] Successfully generated ${PLUGIN_NAME} plugin files inside extension at: ${jsUrl}`);
     } catch (e) {
         console.error(`${pkg.name} >> Failed to write plugin assets`, e);
     }

@@ -73,7 +73,7 @@ async function updateUIValues(thisAny: any) {
     if (thisAny.$.isListingImgs) thisAny.$.isListingImgs.value = profile.is_listing_imgs ?? true;
     if (thisAny.$.isListingJson) thisAny.$.isListingJson.value = profile.is_listing_json ?? true;
     if (thisAny.$.isRegisteredToBridge) thisAny.$.isRegisteredToBridge.value = profile.is_registered_to_bridge ?? true;
-    if (thisAny.$.pluginName) thisAny.$.pluginName.value = profile.plugin_name ?? '_bundle_list';
+    if (thisAny.$.pluginName) thisAny.$.pluginName.value = profile.plugin_name ?? 'pts_bundles';
     if (thisAny.$.pluginLocation) thisAny.$.pluginLocation.value = profile.plugin_location ?? 'assets/__plugins__';
 }
 
