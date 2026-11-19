@@ -3,4 +3,5 @@ dist/
 .DS_Store
 Thumbs.db
 *.log
-assets/_$scripts/
+assets/_$plugins/*
+
